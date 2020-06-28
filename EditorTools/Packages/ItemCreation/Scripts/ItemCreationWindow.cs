@@ -125,9 +125,15 @@ namespace Game.Editor
         [ResponsiveButtonGroup("Actions")]
         public void Save()
         {
-
-
-
+            //Create SO
+            ItemData newItem = ScriptableObject.CreateInstance<ItemData>();
+            newItem.Name = Name;
+            newItem.Icon = Icon;
+            newItem.Effects = Effects;
+            newItem.Description= Description;
+            newItem.Category= Category;
+            newItem.Rarity= Rarity;
+            AssetUtil.SaveItemAsset(newItem);
 
         }
 

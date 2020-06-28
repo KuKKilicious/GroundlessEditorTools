@@ -32,4 +32,8 @@ public static class AssetUtil {
         AssetDatabase.CreateAsset(newItem, ITEM_SO_PATH + fileName + ".asset");
         AssetDatabase.SaveAssets();
     }
+
+
+   
+
 }
