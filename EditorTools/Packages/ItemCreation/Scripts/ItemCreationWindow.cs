@@ -37,15 +37,15 @@ namespace Game.Editor
             newItem.Name = itemName;
 
 
-           
 
-            AssetUtil.SaveItemAsset(newItem);
+
+            if (!AssetUtil.SaveItemAsset(newItem)) { return; }; //return if unsuccessful
             //Create ViewData
 
-            itemTable.Add(new ItemTableViewData(itemName));
+            ItemTable.Add(new ItemTableViewData(itemName));
         }
 
-    
+
 
         //TODO: replace with settings icon
         [HorizontalGroup("Top", 0.1f, MarginLeft = 0.1f, MinWidth = 100, MaxWidth = 1000)]
@@ -65,7 +65,16 @@ namespace Game.Editor
         [Button(ButtonSizes.Large)]
         public void LoadAll()
         {
-            //Check if sure?
+            //TODO: Check if sure?
+            ItemData[] items = AssetUtil.LoadItemAssets();
+
+            if (items == null || items.Length <= 0) { return; } //return if null or empty
+
+            foreach (var item in items)
+            {
+                ItemTable.Add(new ItemTableViewData(item.name, item.Icon, item.Effects, item.Description, item.Category, item.Rarity));
+            }
+
         }
 
         [PropertyOrder(10)]
@@ -78,7 +87,7 @@ namespace Game.Editor
 
         [PropertyOrder(-1)]
         [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000)]
-        public List<ItemTableViewData> itemTable = new List<ItemTableViewData>(); //TODO: Figure out how to sort table columns
+        public List<ItemTableViewData> ItemTable = new List<ItemTableViewData>(); //TODO: Figure out how to sort table columns
 
         //         [OnInspectorGUI]
         //         public void OnInspectorGUIUpdate()
@@ -88,7 +97,7 @@ namespace Game.Editor
         //         }
 
 
-       
+
     }
 
 
@@ -101,7 +110,15 @@ namespace Game.Editor
         {
             this.Name = name;
         }
-
+        public ItemTableViewData(string name, Texture icon, string effects, string description, string category, string rarity)
+        {
+            this.Name = name;
+            this.Icon = icon;
+            this.Effects = effects;
+            this.Description = description;
+            this.Category = category;
+            this.Rarity = rarity;
+        }
         [PreviewField]
         [TableColumnWidth(64, Resizable = false)]
         public Texture Icon;
@@ -130,9 +147,9 @@ namespace Game.Editor
             newItem.Name = Name;
             newItem.Icon = Icon;
             newItem.Effects = Effects;
-            newItem.Description= Description;
-            newItem.Category= Category;
-            newItem.Rarity= Rarity;
+            newItem.Description = Description;
+            newItem.Category = Category;
+            newItem.Rarity = Rarity;
             AssetUtil.SaveItemAsset(newItem);
 
         }
