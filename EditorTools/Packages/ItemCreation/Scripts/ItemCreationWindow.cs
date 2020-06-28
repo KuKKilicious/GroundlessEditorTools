@@ -6,10 +6,10 @@ using UnityEngine;
 using UnityEditor;
 
 using Game.Base;
+using Game.Base.Utilities;
 
 namespace Game.Editor
 {
-
     public class ItemCreationWindow : OdinEditorWindow
     {
         [MenuItem("Game/ItemCreation")]
@@ -17,25 +17,40 @@ namespace Game.Editor
         {
             GetWindow<ItemCreationWindow>().Show();
         }
-        
-        [PropertyOrder(-10),HorizontalGroup("Top", 0.5f, MinWidth = 100, MaxWidth = 1000), LabelWidth(100)]
-        [Button(ButtonSizes.Large,ButtonStyle.FoldoutButton, Expanded = true)]
+
+        [PropertyOrder(-10), HorizontalGroup("Top", 0.4f, MinWidth = 100, MaxWidth = 1000), LabelWidth(100)]
+        [Button(ButtonSizes.Large, ButtonStyle.FoldoutButton, Expanded = true)]
         public void Search(string searchTerm)
         {
-         
+
         }
 
 
-        //TODO: Add Settings Button
-
-
-        [HorizontalGroup("Top", 0.5f, MarginLeft = 0.1f, MinWidth = 100, MaxWidth = 1000)]
-        [Button(ButtonSizes.Large)]
-        public void AddNewItem()
+        [HorizontalGroup("Top", 0.4f, MarginLeft = 0.1f, MinWidth = 150, MaxWidth = 1000), LabelWidth(150)]
+        [Button(ButtonSizes.Large, ButtonStyle.FoldoutButton, Expanded = true)]
+        public void AddNewItem(string itemName)
         {
 
+
+            //Create SO
+            ItemData newItem = ScriptableObject.CreateInstance<ItemData>();
+            newItem.Name = itemName;
+
+
+           
+
+            AssetUtil.SaveItemAsset(newItem);
+            //Create ViewData
+
+            itemTable.Add(new ItemTableViewData(itemName));
         }
 
+    
+
+        //TODO: replace with settings icon
+        [HorizontalGroup("Top", 0.1f, MarginLeft = 0.1f, MinWidth = 100, MaxWidth = 1000)]
+        [Button(ButtonSizes.Small)]
+        public void Settings() { }
 
         [PropertyOrder(10)]
         [HorizontalGroup("Bottom")]
@@ -58,48 +73,61 @@ namespace Game.Editor
         [Button(ButtonSizes.Large)]
         public void Clear()
         {
-        
+
         }
-        
+
         [PropertyOrder(-1)]
         [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000)]
         public List<ItemTableViewData> itemTable = new List<ItemTableViewData>(); //TODO: Figure out how to sort table columns
 
-//         [OnInspectorGUI]
-//         public void OnInspectorGUIUpdate()
-//         {
-//             Debug.Log("");
-// 
-//         }
+        //         [OnInspectorGUI]
+        //         public void OnInspectorGUIUpdate()
+        //         {
+        //             Debug.Log("");
+        // 
+        //         }
+
+
+       
     }
 
 
-    
+
     [System.Serializable]
     public class ItemTableViewData
     {
+
+        public ItemTableViewData(string name)
+        {
+            this.Name = name;
+        }
+
         [PreviewField]
         [TableColumnWidth(64, Resizable = false)]
-        public Texture icon;
-        [TableColumnWidth(40)]
-        public string name;
+        public Texture Icon;
+
+        [TableColumnWidth(40)] //TODO: set dirty /w OnValueChanged to apply new fileName when saving
+        public string Name;
 
         [AssetsOnly]
-        public string effects; //TODO: Use Effect Data
+        public string Effects; //TODO: Use Effect Data
 
         [TextArea(2, 10)]
-        public string description;
+        public string Description;
 
         [TableColumnWidth(40)]
-        public string category; //TODO: Use category Enum 
+        public string Category; //TODO: Use category Enum 
 
         [TableColumnWidth(40)]
-        public string rarity; //TODO: Use rarity Enum 
+        public string Rarity; //TODO: Use rarity Enum 
 
         [Button(ButtonSizes.Large)]
         [ResponsiveButtonGroup("Actions")]
         public void Save()
         {
+
+
+
 
         }
 
