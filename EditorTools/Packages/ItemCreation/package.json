@@ -15,5 +15,8 @@
     "email": "kukkilicious@gmail.com",
     "url": "https://kukkilicious.github.io/"
   },
-  "type": "tool"
+  "type": "tool",
+  "dependencies": {
+    "com.groundless.base": "0.0.1"
+  }
 }
