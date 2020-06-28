@@ -5,6 +5,8 @@ using Sirenix.OdinInspector.Editor;
 using UnityEngine;
 using UnityEditor;
 
+using Game.Base;
+
 namespace Game.Editor
 {
 
@@ -20,9 +22,13 @@ namespace Game.Editor
         [Button(ButtonSizes.Large,ButtonStyle.FoldoutButton, Expanded = true)]
         public void Search(string searchTerm)
         {
-
+         
         }
-        
+
+
+        //TODO: Add Settings Button
+
+
         [HorizontalGroup("Top", 0.5f, MarginLeft = 0.1f, MinWidth = 100, MaxWidth = 1000)]
         [Button(ButtonSizes.Large)]
         public void AddNewItem()
@@ -52,19 +58,19 @@ namespace Game.Editor
         [Button(ButtonSizes.Large)]
         public void Clear()
         {
-
+        
         }
         
         [PropertyOrder(-1)]
         [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000)]
         public List<ItemTableViewData> itemTable = new List<ItemTableViewData>(); //TODO: Figure out how to sort table columns
 
-        [OnInspectorGUI]
-        public void OnInspectorGUIUpdate()
-        {
-            Debug.Log("");
-
-        }
+//         [OnInspectorGUI]
+//         public void OnInspectorGUIUpdate()
+//         {
+//             Debug.Log("");
+// 
+//         }
     }
 
 
