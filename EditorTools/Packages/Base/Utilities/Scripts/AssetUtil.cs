@@ -45,14 +45,12 @@ public static class AssetUtil
         List<ItemData> items = new List<ItemData>();
         try
         {
-            string[] assetsGUID = AssetDatabase.FindAssets("t:ItemData", new[] { ITEM_SO_FOLDER_PATH });
+            string[] assetsGuid = AssetDatabase.FindAssets("t:ItemData", new[] { ITEM_SO_FOLDER_PATH });
 
-            if (assetsGUID == null || assetsGUID.Length <= 0) { return null; } //return if folder doesn't contain items
+            if (assetsGuid == null || assetsGuid.Length <= 0) { return null; } //return if folder doesn't contain items
 
             //Iterate over guids to get path and get ItemData from path and add each item to items list
-            items.AddRange(assetsGUID
-                .Select(guid => AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(assetsGUID[0]), typeof(ItemData)) as ItemData)
-                .TakeWhile(item => item != null));
+            items.AddRange(assetsGuid.Select(t => AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(t), typeof(ItemData)) as ItemData));
         }
         catch (System.Exception)
         {
