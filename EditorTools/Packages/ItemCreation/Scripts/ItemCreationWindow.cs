@@ -10,6 +10,10 @@ using Game.Base.Utilities;
 
 namespace Game.Editor
 {
+    public enum SortType
+    {
+        Name, Category, Rarity
+    }
     public class ItemCreationWindow : OdinEditorWindow
     {
         [MenuItem("Game/ItemCreation")]
@@ -18,7 +22,7 @@ namespace Game.Editor
             GetWindow<ItemCreationWindow>().Show();
         }
 
-        [PropertyOrder(-10), HorizontalGroup("Top", 0.4f, MinWidth = 100, MaxWidth = 1000), LabelWidth(100)]
+        [PropertyOrder(-10), HorizontalGroup("Top", 0.4f, MinWidth = 100, MaxWidth = 1000, LabelWidth =100)]
         [Button(ButtonSizes.Large, ButtonStyle.FoldoutButton, Expanded = true)]
         public void Search(string searchTerm)
         {
@@ -26,11 +30,15 @@ namespace Game.Editor
         }
 
 
-        [HorizontalGroup("Top", 0.4f, MarginLeft = 0.1f, MinWidth = 150, MaxWidth = 1000), LabelWidth(150)]
+        [HorizontalGroup("Top", 0.4f, MarginLeft = 0.1f, MinWidth = 150, MaxWidth = 1000, LabelWidth = 150)]
         [Button(ButtonSizes.Large, ButtonStyle.FoldoutButton, Expanded = true)]
         public void AddNewItem(string itemName)
         {
-
+            if (itemName == null || itemName.Length < 4)
+            {
+                Debug.LogWarning("Enter an item name that is longer than 3 characters before trying adding an item");
+                return;
+            }
 
             //Create SO
             ItemData newItem = ScriptableObject.CreateInstance<ItemData>();
@@ -48,16 +56,21 @@ namespace Game.Editor
 
 
         //TODO: replace with settings icon
-        [HorizontalGroup("Top", 0.1f, MarginLeft = 0.1f, MinWidth = 100, MaxWidth = 1000)]
+        [HorizontalGroup("Top", 0.1f, MarginLeft = 0.1f, MinWidth = 100, MaxWidth = 300)]
         [Button(ButtonSizes.Small)]
         public void Settings() { }
+
+        
 
         [PropertyOrder(10)]
         [HorizontalGroup("Bottom")]
         [Button(ButtonSizes.Large)]
         public void SaveAll()
         {
-
+            foreach (var item in ItemTable)
+            {
+                item.Save();
+            }
         }
 
         [PropertyOrder(10)]
@@ -66,13 +79,16 @@ namespace Game.Editor
         public void LoadAll()
         {
             //TODO: Check if sure?
+
+            ItemTable.Clear();
+
             ItemData[] items = AssetUtil.LoadItemAssets();
 
             if (items == null || items.Length <= 0) { return; } //return if null or empty
 
             foreach (var item in items)
             {
-                ItemTable.Add(new ItemTableViewData(item.name, item.Icon, item.Effects, item.Description, item.Category, item.Rarity));
+                ItemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.Category, item.Rarity));
             }
 
         }
@@ -82,7 +98,7 @@ namespace Game.Editor
         [Button(ButtonSizes.Large)]
         public void Clear()
         {
-
+            ItemTable.Clear();
         }
 
         [PropertyOrder(-1)]
@@ -110,7 +126,7 @@ namespace Game.Editor
         {
             this.Name = name;
         }
-        public ItemTableViewData(string name, Texture icon, string effects, string description, string category, string rarity)
+        public ItemTableViewData(string name, Texture icon, string effects, string description, ItemCategory category, ItemRarity rarity)
         {
             this.Name = name;
             this.Icon = icon;
@@ -133,10 +149,10 @@ namespace Game.Editor
         public string Description;
 
         [TableColumnWidth(40)]
-        public string Category; //TODO: Use category Enum 
+        public ItemCategory Category; //TODO: Use category Enum 
 
         [TableColumnWidth(40)]
-        public string Rarity; //TODO: Use rarity Enum 
+        public ItemRarity Rarity; //TODO: Use rarity Enum 
 
         [Button(ButtonSizes.Large)]
         [ResponsiveButtonGroup("Actions")]
