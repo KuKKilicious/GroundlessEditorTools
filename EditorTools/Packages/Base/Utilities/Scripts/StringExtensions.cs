@@ -34,5 +34,24 @@ namespace Game.Base.Utilities
             }
             return stringBuilder.ToString();
         }
+
+
+        public static string ToSentenceCase(this string input)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(System.Char.ToUpper(input[0])); //Ignore first and to Upper
+            for (int index = 1; index < input.Length; ++index)
+            {
+                char ch = input[index];
+                if (char.IsUpper(ch) && index + 1 < input.Length)
+                {
+                    stringBuilder.Append(" ");
+                    stringBuilder.Append(ch);
+                }
+                else
+                    stringBuilder.Append(ch);
+            }
+            return stringBuilder.ToString();
+        }
     }
 }
