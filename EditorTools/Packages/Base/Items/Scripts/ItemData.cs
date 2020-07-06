@@ -15,8 +15,8 @@ namespace Game.Base
 
         public string Description;
 
-        public string Category; //TODO: Use category Enum 
+        public ItemCategory Category; //TODO: Use category Enum 
 
-        public string Rarity; //TODO: Use rarity Enum 
+        public ItemRarity Rarity; //TODO: Use rarity Enum 
     }
 }
