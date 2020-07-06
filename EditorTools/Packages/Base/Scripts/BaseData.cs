@@ -6,7 +6,7 @@ namespace Game.Base
 {
     public enum ItemCategory
     {
-        Offense, Defense, Ability, NEON, Fortune
+        Offense, Defense, Fortune, Neon, Utility
     }
 
     public enum ItemRarity

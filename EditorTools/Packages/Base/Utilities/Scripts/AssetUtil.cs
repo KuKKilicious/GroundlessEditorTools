@@ -59,5 +59,8 @@ public static class AssetUtil
         return items?.ToArray();
     }
 
-
+    public static void DeleteItemAsset()
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
@@ -7,22 +8,28 @@ using UnityEditor;
 
 using Game.Base;
 using Game.Base.Utilities;
+using System.Linq;
 
 namespace Game.Editor
 {
+    
     public enum SortType
     {
         Name, Category, Rarity
     }
     public class ItemCreationWindow : OdinEditorWindow
     {
+        private SortType currentSortType;
+        private bool isSorted;
+
+
         [MenuItem("Game/ItemCreation")]
         private static void OpenWindow()
         {
             GetWindow<ItemCreationWindow>().Show();
         }
 
-        [PropertyOrder(-10), HorizontalGroup("Top", 0.4f, MinWidth = 100, MaxWidth = 1000, LabelWidth =100)]
+        [PropertyOrder(-10), HorizontalGroup("Top", 0.4f, MinWidth = 100, MaxWidth = 1000, LabelWidth = 100)]
         [Button(ButtonSizes.Large, ButtonStyle.FoldoutButton, Expanded = true)]
         public void Search(string searchTerm)
         {
@@ -50,7 +57,7 @@ namespace Game.Editor
             if (!AssetUtil.SaveItemAsset(newItem)) { return; }; //return if unsuccessful
             //Create ViewData
 
-            ItemTable.Add(new ItemTableViewData(itemName));
+            itemTable.Add(new ItemTableViewData(itemName));
         }
 
 
@@ -60,14 +67,40 @@ namespace Game.Editor
         [Button(ButtonSizes.Small)]
         public void Settings() { }
 
-        
+        [HorizontalGroup("Top", 0.0f, MinWidth = 100, MaxWidth = 3100, LabelWidth = 100)]
+        [Button(ButtonSizes.Small, ButtonStyle.FoldoutButton, Expanded = true)]
+        public void Sort(SortType sortType)
+        {
+            switch (sortType)
+            {
+                case (SortType.Name):
+                {
+                    itemTable = itemTable.OrderBy(o => o.Name).ToList();
+
+                    var bla = SortType.Name;
+                    break;
+                }
+                case (SortType.Category):
+                {
+                    itemTable = itemTable.OrderBy(o => o.Category).ToList();
+                    break;
+                }
+                case (SortType.Rarity):
+                {
+                    itemTable = itemTable.OrderBy(o => o.Rarity).ToList();
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(sortType), sortType, null);
+            }
+        }
 
         [PropertyOrder(10)]
         [HorizontalGroup("Bottom")]
         [Button(ButtonSizes.Large)]
         public void SaveAll()
         {
-            foreach (var item in ItemTable)
+            foreach (var item in itemTable)
             {
                 item.Save();
             }
@@ -80,7 +113,7 @@ namespace Game.Editor
         {
             //TODO: Check if sure?
 
-            ItemTable.Clear();
+            itemTable.Clear();
 
             ItemData[] items = AssetUtil.LoadItemAssets();
 
@@ -88,7 +121,7 @@ namespace Game.Editor
 
             foreach (var item in items)
             {
-                ItemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.Category, item.Rarity));
+                itemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.Category, item.Rarity));
             }
 
         }
@@ -98,12 +131,13 @@ namespace Game.Editor
         [Button(ButtonSizes.Large)]
         public void Clear()
         {
-            ItemTable.Clear();
+            itemTable.Clear();
         }
 
         [PropertyOrder(-1)]
-        [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000)]
-        public List<ItemTableViewData> ItemTable = new List<ItemTableViewData>(); //TODO: Figure out how to sort table columns
+        [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000,HideToolbar =true)]
+        [SerializeField]
+        private List<ItemTableViewData> itemTable = new List<ItemTableViewData>();
 
         //         [OnInspectorGUI]
         //         public void OnInspectorGUIUpdate()
@@ -160,6 +194,8 @@ namespace Game.Editor
         {
             //Create SO
             ItemData newItem = ScriptableObject.CreateInstance<ItemData>();
+            //if new name, delete old asset
+            //AssetUtil.DeleteItemAsset();
             newItem.Name = Name;
             newItem.Icon = Icon;
             newItem.Effects = Effects;
@@ -167,6 +203,9 @@ namespace Game.Editor
             newItem.Category = Category;
             newItem.Rarity = Rarity;
             AssetUtil.SaveItemAsset(newItem);
+
+            //reset flags
+            nameChanged=false;
 
         }
 
@@ -176,6 +215,10 @@ namespace Game.Editor
         {
 
         }
+
+        private bool nameChanged = false;
+
+        private void NameChanged(){nameChanged = true;}
 
     }
 }
