@@ -1,6 +1,8 @@
 {
     "name": "EditorToolsAssembly",
-    "references": [],
+    "references": [
+        "GUID:ae7e3c2a1e0eab64b9df01a925479375"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
