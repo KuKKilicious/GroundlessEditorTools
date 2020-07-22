@@ -9,10 +9,11 @@ using UnityEditor;
 using Game.Base;
 using Game.Base.Utilities;
 using System.Linq;
+using System.ComponentModel;
 
 namespace Game.Editor
 {
-    
+
     public enum SortType
     {
         Name, Category, Rarity
@@ -135,7 +136,7 @@ namespace Game.Editor
         }
 
         [PropertyOrder(-1)]
-        [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000,HideToolbar =true)]
+        [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000, HideToolbar = true)]
         [SerializeField]
         private List<ItemTableViewData> itemTable = new List<ItemTableViewData>();
 
@@ -146,10 +147,7 @@ namespace Game.Editor
         // 
         //         }
 
-
-
     }
-
 
 
     [System.Serializable]
@@ -160,7 +158,7 @@ namespace Game.Editor
         {
             this.Name = name;
         }
-        public ItemTableViewData(string name, Texture icon, string effects, string description, ItemCategory category, ItemRarity rarity)
+        public ItemTableViewData(string name, Texture icon, IItemEffect[] effects, string description, ItemCategory category, ItemRarity rarity)
         {
             this.Name = name;
             this.Icon = icon;
@@ -173,20 +171,23 @@ namespace Game.Editor
         [TableColumnWidth(64, Resizable = false)]
         public Texture Icon;
 
-        [TableColumnWidth(40)] //TODO: set dirty /w OnValueChanged to apply new fileName when saving
+        [TableColumnWidth(40), OnValueChanged("NameChanged")] //TODO: set dirty /w OnValueChanged to apply new fileName when saving
         public string Name;
-
+        
         [AssetsOnly]
-        public string Effects; //TODO: Use Effect Data
+        public IItemEffect[] Effects; //TODO: Use Effect Data
+        
+        [TableColumnWidth(80)]
+        public ItemEffectViewData[] itemEffect;
 
         [TextArea(2, 10)]
         public string Description;
 
-        [TableColumnWidth(40)]
-        public ItemCategory Category; //TODO: Use category Enum 
+        [TableColumnWidth(20)]
+        public ItemCategory Category; 
 
-        [TableColumnWidth(40)]
-        public ItemRarity Rarity; //TODO: Use rarity Enum 
+        [TableColumnWidth(20)]
+        public ItemRarity Rarity;
 
         [Button(ButtonSizes.Large)]
         [ResponsiveButtonGroup("Actions")]
@@ -195,7 +196,10 @@ namespace Game.Editor
             //Create SO
             ItemData newItem = ScriptableObject.CreateInstance<ItemData>();
             //if new name, delete old asset
-            //AssetUtil.DeleteItemAsset();
+            if (nameChanged)
+            {
+                //AssetUtil.DeleteItemAsset();
+            }
             newItem.Name = Name;
             newItem.Icon = Icon;
             newItem.Effects = Effects;
@@ -205,20 +209,26 @@ namespace Game.Editor
             AssetUtil.SaveItemAsset(newItem);
 
             //reset flags
-            nameChanged=false;
-
+            nameChanged = false;
         }
 
         [Button(ButtonSizes.Large)]
         [ResponsiveButtonGroup("Actions")]
         public void Revert()
         {
-
+            
         }
 
         private bool nameChanged = false;
 
-        private void NameChanged(){nameChanged = true;}
+        private void NameChanged() {nameChanged = true; } //Called by OnValueChanged of Name
+    }
+    [System.Serializable]
+    public class ItemEffectViewData
+    {
+        
+        public ItemEffect effect;
 
+        //effect (Launch Projectile)
     }
 }
