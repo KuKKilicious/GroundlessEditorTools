@@ -17,14 +17,6 @@ namespace Game.Base
     public interface ISource { }
 
     [System.Serializable]
-    public abstract class ItemEffectssssss : IItemEffect
-    {
-        public void Apply(ISource source, ITarget target, IItemEffectParameter itemEffectParameter)
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-    [System.Serializable]
     public abstract class ItemEffect : ScriptableObject
     {
         public EffectSource source;
@@ -32,4 +24,11 @@ namespace Game.Base
         public EffectTrigger trigger;
 
     }
+
+    public class SpawnEffect : ItemEffect
+    {
+        public GameObject objectToSpawn;
+    }
+
+
 }

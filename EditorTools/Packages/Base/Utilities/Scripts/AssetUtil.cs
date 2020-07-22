@@ -59,8 +59,8 @@ public static class AssetUtil
         return items?.ToArray();
     }
 
-    public static void DeleteItemAsset()
+    public static void DeleteItemAsset(string fileName)
     {
-        throw new System.NotImplementedException();
+        AssetDatabase.DeleteAsset(ITEM_SO_FOLDER_PATH + "/" + fileName+".asset");
     }
 }

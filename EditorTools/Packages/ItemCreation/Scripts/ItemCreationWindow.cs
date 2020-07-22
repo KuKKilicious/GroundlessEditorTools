@@ -29,6 +29,11 @@ namespace Game.Editor
         {
             GetWindow<ItemCreationWindow>().Show();
         }
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            //TODO: Check to make sure that changes can be discarded i.e. ask for save
+        }
 
         [PropertyOrder(-10), HorizontalGroup("Top", 0.4f, MinWidth = 100, MaxWidth = 1000, LabelWidth = 100)]
         [Button(ButtonSizes.Large, ButtonStyle.FoldoutButton, Expanded = true)]
@@ -140,13 +145,6 @@ namespace Game.Editor
         [SerializeField]
         private List<ItemTableViewData> itemTable = new List<ItemTableViewData>();
 
-        //         [OnInspectorGUI]
-        //         public void OnInspectorGUIUpdate()
-        //         {
-        //             Debug.Log("");
-        // 
-        //         }
-
     }
 
 
@@ -158,9 +156,10 @@ namespace Game.Editor
         {
             this.Name = name;
         }
-        public ItemTableViewData(string name, Texture icon, IItemEffect[] effects, string description, ItemCategory category, ItemRarity rarity)
+        public ItemTableViewData(string name, Texture icon, ItemEffect[] effects, string description, ItemCategory category, ItemRarity rarity)
         {
             this.Name = name;
+            this.oldName = name;
             this.Icon = icon;
             this.Effects = effects;
             this.Description = description;
@@ -171,34 +170,37 @@ namespace Game.Editor
         [TableColumnWidth(64, Resizable = false)]
         public Texture Icon;
 
-        [TableColumnWidth(40), OnValueChanged("NameChanged")] //TODO: set dirty /w OnValueChanged to apply new fileName when saving
+        [TableColumnWidth(80)] 
         public string Name;
         
         [AssetsOnly]
-        public IItemEffect[] Effects; //TODO: Use Effect Data
+        [TableColumnWidth(300)]//TODO: Launch ItemEffect Wizard when adding new effect
+        [InlineEditor]
+        public ItemEffect[] Effects; 
         
-        [TableColumnWidth(80)]
-        public ItemEffectViewData[] itemEffect;
-
-        [TextArea(2, 10)]
+        [TableColumnWidth(300)]
+        [TextArea(5, 10)]
         public string Description;
 
-        [TableColumnWidth(20)]
+        [TableColumnWidth(100,Resizable = false)]
         public ItemCategory Category; 
 
-        [TableColumnWidth(20)]
+        [TableColumnWidth(100,Resizable = false)]
         public ItemRarity Rarity;
 
-        [Button(ButtonSizes.Large)]
+        [Button(ButtonSizes.Medium)]
+        [TableColumnWidth(60,Resizable = false)]
         [ResponsiveButtonGroup("Actions")]
         public void Save()
         {
             //Create SO
             ItemData newItem = ScriptableObject.CreateInstance<ItemData>();
             //if new name, delete old asset
-            if (nameChanged)
+            if (!oldName.Equals(Name))
             {
-                //AssetUtil.DeleteItemAsset();
+                //TODO: Delete Asset
+                AssetUtil.DeleteItemAsset(oldName.ToTitleCase());
+                oldName = Name;
             }
             newItem.Name = Name;
             newItem.Icon = Icon;
@@ -208,27 +210,15 @@ namespace Game.Editor
             newItem.Rarity = Rarity;
             AssetUtil.SaveItemAsset(newItem);
 
-            //reset flags
-            nameChanged = false;
         }
 
-        [Button(ButtonSizes.Large)]
-        [ResponsiveButtonGroup("Actions")]
-        public void Revert()
-        {
-            
-        }
+//         [Button(ButtonSizes.Large)]
+//         [ResponsiveButtonGroup("Actions")]
+//         public void Revert()
+//         {
+//             
+//         }
 
-        private bool nameChanged = false;
-
-        private void NameChanged() {nameChanged = true; } //Called by OnValueChanged of Name
-    }
-    [System.Serializable]
-    public class ItemEffectViewData
-    {
-        
-        public ItemEffect effect;
-
-        //effect (Launch Projectile)
+        private string oldName = "";
     }
 }
