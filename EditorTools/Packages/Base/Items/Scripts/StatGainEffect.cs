@@ -9,6 +9,7 @@ namespace Game.Base
     [CreateAssetMenu()] //TODO: Fix CreateAssetMenu() not taking any arguments
     public class StatGainEffect : ItemEffect
     {
+        public StatType Stat;
         public bool IsMultiple;
         public float Value;
     }
