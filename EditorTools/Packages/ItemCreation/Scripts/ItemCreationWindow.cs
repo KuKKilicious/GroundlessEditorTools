@@ -29,6 +29,16 @@ namespace Game.Editor
         {
             GetWindow<ItemCreationWindow>().Show();
         }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            if (EditorUtility.DisplayDialog("Save", "Do you want to save?", "Yes", "No"))
+            {
+                SaveAll();
+            }
+        }
         [PropertyOrder(-10), HorizontalGroup("Top", 0.4f, MinWidth = 100, MaxWidth = 1000, LabelWidth = 100)]
         [Button(ButtonSizes.Large, ButtonStyle.FoldoutButton, Expanded = true)]
         public void Search(string searchTerm)
@@ -54,7 +64,7 @@ namespace Game.Editor
 
 
 
-            if (!AssetUtil.SaveItemAsset(newItem)) { return; }; //return if unsuccessful
+            if (!AssetUtil.SaveAsset(newItem)) { return; }; //return if unsuccessful
             //Create ViewData
 
             itemTable.Add(new ItemTableViewData(itemName));
@@ -77,7 +87,6 @@ namespace Game.Editor
                 {
                     itemTable = itemTable.OrderBy(o => o.Name).ToList();
 
-                    var bla = SortType.Name;
                     break;
                 }
                 case (SortType.Category):
@@ -156,7 +165,7 @@ namespace Game.Editor
         {
             this.Name = name;
         }
-        public ItemTableViewData(string name, Texture icon, ItemEffect[] effects, string description, ItemCategory category, ItemRarity rarity)
+        public ItemTableViewData(string name, Texture icon, List<ItemEffect> effects, string description, ItemCategory category, ItemRarity rarity)
         {
             this.Name = name;
             this.oldName = name;
@@ -176,17 +185,18 @@ namespace Game.Editor
         public string Name;
         
         [AssetsOnly]
-        [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000, HideToolbar = true)]
-        [TableColumnWidth(500)]//TODO: Launch ItemEffect Wizard when adding new effect
+        [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000, HideToolbar = true)]//TODO: Remove the X in the list OR make X also delete Scriptable Object 
+        [TableColumnWidth(500)]
         [InlineEditor]
         [PropertyOrder(2)]
-        public ItemEffect[] Effects;
+        public List<ItemEffect> Effects;
 
         [Button(ButtonSizes.Medium,Name ="Details")]
         [TableColumnWidth(60,Resizable = false)]
         [PropertyOrder(3)]
         public void Details()
         {
+            EffectCreationWindow.Item = this;
             EffectCreationWindow.OpenWindow(this);
         }
 
@@ -223,7 +233,7 @@ namespace Game.Editor
             newItem.Description = Description;
             newItem.Category = Category;
             newItem.Rarity = Rarity;
-            AssetUtil.SaveItemAsset(newItem);
+            AssetUtil.SaveAsset(newItem);
 
         }
 

@@ -11,7 +11,7 @@ namespace Game.Base
 
         public string Name;
 
-        public ItemEffect[] Effects; //TODO: Use Effect Data
+        public List<ItemEffect> Effects; //TODO: Use Effect Data
 
         public string Description;
 
