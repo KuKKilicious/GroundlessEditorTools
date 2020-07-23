@@ -29,12 +29,6 @@ namespace Game.Editor
         {
             GetWindow<ItemCreationWindow>().Show();
         }
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            //TODO: Check to make sure that changes can be discarded i.e. ask for save
-        }
-
         [PropertyOrder(-10), HorizontalGroup("Top", 0.4f, MinWidth = 100, MaxWidth = 1000, LabelWidth = 100)]
         [Button(ButtonSizes.Large, ButtonStyle.FoldoutButton, Expanded = true)]
         public void Search(string searchTerm)
@@ -174,28 +168,43 @@ namespace Game.Editor
         }
         [PreviewField]
         [TableColumnWidth(64, Resizable = false)]
+        [PropertyOrder(0)]
         public Texture Icon;
 
         [TableColumnWidth(120)] 
+        [PropertyOrder(1)]
         public string Name;
         
         [AssetsOnly]
-        [TableColumnWidth(300)]//TODO: Launch ItemEffect Wizard when adding new effect
+        [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000, HideToolbar = true)]
+        [TableColumnWidth(500)]//TODO: Launch ItemEffect Wizard when adding new effect
         [InlineEditor]
-        public ItemEffect[] Effects; 
-        
+        [PropertyOrder(2)]
+        public ItemEffect[] Effects;
+
+        [Button(ButtonSizes.Medium,Name ="Details")]
+        [TableColumnWidth(60,Resizable = false)]
+        [PropertyOrder(3)]
+        public void Details()
+        {
+            EffectCreationWindow.OpenWindow(this);
+        }
+
         [TableColumnWidth(300)]
         [TextArea(5, 10)]
+        [PropertyOrder(5)]
         public string Description;
 
+        [PropertyOrder(10)]
         [TableColumnWidth(100,Resizable = false)]
         public ItemCategory Category; 
-
+        [PropertyOrder(11)]
         [TableColumnWidth(100,Resizable = false)]
         public ItemRarity Rarity;
 
         [Button(ButtonSizes.Medium)]
         [TableColumnWidth(60,Resizable = false)]
+        [PropertyOrder(15)]
         [ResponsiveButtonGroup("Actions")]
         public void Save()
         {
