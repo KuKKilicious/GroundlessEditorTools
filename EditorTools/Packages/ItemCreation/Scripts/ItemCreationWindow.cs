@@ -118,9 +118,11 @@ namespace Game.Editor
         public void LoadAll()
         {
             //TODO: Check if sure?
-
+            var toClear = EditorUtility.DisplayDialog("Confirmation", "Are you sure to load all?", "Yes", "No");
+            if (!toClear)
+                return;
             itemTable.Clear();
-
+            
             ItemData[] items = AssetUtil.LoadItemAssets();
 
             if (items == null || items.Length <= 0) { return; } //return if null or empty
@@ -137,6 +139,10 @@ namespace Game.Editor
         [Button(ButtonSizes.Large)]
         public void Clear()
         {
+            var toClear = EditorUtility.DisplayDialog("Confirmation", "Are you sure to clear list?", "Yes", "No");
+            if (!toClear)
+                return;
+
             itemTable.Clear();
         }
 
@@ -170,7 +176,7 @@ namespace Game.Editor
         [TableColumnWidth(64, Resizable = false)]
         public Texture Icon;
 
-        [TableColumnWidth(80)] 
+        [TableColumnWidth(120)] 
         public string Name;
         
         [AssetsOnly]
@@ -204,7 +210,7 @@ namespace Game.Editor
             }
             newItem.Name = Name;
             newItem.Icon = Icon;
-            newItem.Effects = Effects;
+            //newItem.Effects = Effects;
             newItem.Description = Description;
             newItem.Category = Category;
             newItem.Rarity = Rarity;
@@ -221,4 +227,6 @@ namespace Game.Editor
 
         private string oldName = "";
     }
+
+
 }
