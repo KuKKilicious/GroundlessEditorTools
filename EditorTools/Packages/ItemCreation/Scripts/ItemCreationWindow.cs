@@ -43,7 +43,24 @@ namespace Game.Editor
         [Button(ButtonSizes.Large, ButtonStyle.FoldoutButton, Expanded = true)]
         public void Search(string searchTerm)
         {
+            List<ItemTableViewData> searchResults = new List<ItemTableViewData>();
+            foreach (var item in itemTable)
+            {
+                if (item.Name.Contains(searchTerm)
+                    || item.FullDescription.Contains(searchTerm)
+                    || item.Category.ToString().Contains(searchTerm)
+                    || item.Rarity.ToString().Contains(searchTerm)
+                )
+                {
+                    searchResults.Add(item);
+                }
+            }
 
+            if (searchResults.Count <= 0)
+            {
+                EditorUtility.DisplayDialog("Search", "No search results for given search term", "OK");
+            }
+            itemTable = searchResults;
         }
 
 
@@ -125,14 +142,14 @@ namespace Game.Editor
             if (!toClear)
                 return;
             itemTable.Clear();
-            
+
             ItemData[] items = AssetUtil.LoadItemAssets();
 
             if (items == null || items.Length <= 0) { return; } //return if null or empty
 
             foreach (var item in items)
             {
-                itemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.Category, item.Rarity));
+                itemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.ShortDescription,item.FullDescription, item.Category, item.Rarity));
             }
 
         }
@@ -165,13 +182,14 @@ namespace Game.Editor
         {
             this.Name = name;
         }
-        public ItemTableViewData(string name, Texture icon, List<ItemEffect> effects, string description, ItemCategory category, ItemRarity rarity)
+        public ItemTableViewData(string name, Texture icon, List<ItemEffect> effects,string shortDescription, string fullDescription, ItemCategory category, ItemRarity rarity)
         {
             this.Name = name;
             this.oldName = name;
             this.Icon = icon;
             this.Effects = effects;
-            this.Description = description;
+            this.ShortDescription = shortDescription;
+            this.FullDescription = fullDescription;
             this.Category = category;
             this.Rarity = rarity;
         }
@@ -180,10 +198,10 @@ namespace Game.Editor
         [PropertyOrder(0)]
         public Texture Icon;
 
-        [TableColumnWidth(120)] 
+        [TableColumnWidth(120)]
         [PropertyOrder(1)]
         public string Name;
-        
+
         [AssetsOnly]
         [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000, HideToolbar = true)]//TODO: Remove the X in the list OR make X also delete Scriptable Object 
         [TableColumnWidth(500)]
@@ -191,29 +209,32 @@ namespace Game.Editor
         [PropertyOrder(2)]
         public List<ItemEffect> Effects;
 
-        [Button(ButtonSizes.Medium,Name ="Details")]
-        [TableColumnWidth(60,Resizable = false)]
+        [Button(ButtonSizes.Medium, Name = "Details")]
+        [TableColumnWidth(60, Resizable = false)]
         [PropertyOrder(3)]
         public void Details()
         {
             EffectCreationWindow.Item = this;
             EffectCreationWindow.OpenWindow(this);
         }
-
+        [TableColumnWidth(150)]
+        [TextArea(2, 5)]
+        [PropertyOrder(4)]
+        public string ShortDescription;
         [TableColumnWidth(300)]
         [TextArea(5, 10)]
         [PropertyOrder(5)]
-        public string Description;
+        public string FullDescription;
 
         [PropertyOrder(10)]
-        [TableColumnWidth(100,Resizable = false)]
-        public ItemCategory Category; 
+        [TableColumnWidth(100, Resizable = false)]
+        public ItemCategory Category;
         [PropertyOrder(11)]
-        [TableColumnWidth(100,Resizable = false)]
+        [TableColumnWidth(100, Resizable = false)]
         public ItemRarity Rarity;
 
         [Button(ButtonSizes.Medium)]
-        [TableColumnWidth(60,Resizable = false)]
+        [TableColumnWidth(60, Resizable = false)]
         [PropertyOrder(15)]
         [ResponsiveButtonGroup("Actions")]
         public void Save()
@@ -230,19 +251,20 @@ namespace Game.Editor
             newItem.Name = Name;
             newItem.Icon = Icon;
             newItem.Effects = Effects;
-            newItem.Description = Description;
+            newItem.ShortDescription = ShortDescription;
+            newItem.FullDescription = FullDescription;
             newItem.Category = Category;
             newItem.Rarity = Rarity;
             AssetUtil.SaveAsset(newItem);
 
         }
 
-//         [Button(ButtonSizes.Large)]
-//         [ResponsiveButtonGroup("Actions")]
-//         public void Revert()
-//         {
-//             
-//         }
+        //         [Button(ButtonSizes.Large)]
+        //         [ResponsiveButtonGroup("Actions")]
+        //         public void Revert()
+        //         {
+        //             
+        //         }
 
         private string oldName = "";
     }

@@ -11,12 +11,15 @@ namespace Game.Base
 
         public string Name;
 
-        public List<ItemEffect> Effects; //TODO: Use Effect Data
+        public List<ItemEffect> Effects; 
+        
+        public string ShortDescription;
+        
+        public string FullDescription;
 
-        public string Description;
+        public ItemCategory Category; 
 
-        public ItemCategory Category; //TODO: Use category Enum 
+        public ItemRarity Rarity; 
 
-        public ItemRarity Rarity; //TODO: Use rarity Enum 
     }
 }
