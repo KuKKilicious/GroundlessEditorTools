@@ -47,6 +47,7 @@ namespace Game.Editor
             foreach (var item in itemTable)
             {
                 if (item.Name.Contains(searchTerm)
+                    || item.ShortDescription.Contains(searchTerm)
                     || item.FullDescription.Contains(searchTerm)
                     || item.Category.ToString().Contains(searchTerm)
                     || item.Rarity.ToString().Contains(searchTerm)
