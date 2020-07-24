@@ -18,7 +18,6 @@ namespace Game.Editor
 
         private CreateNewEffectData statGainEffect;
         private CreateNewEffectData spawnEffect;
-        private CreateNewEffectData customEffect;
 
 
         protected override OdinMenuTree BuildMenuTree()
@@ -26,10 +25,11 @@ namespace Game.Editor
             var tree = new OdinMenuTree();
             if (Item == null || Item.Name.Length == 0) { return null; }
 
-            statGainEffect = new CreateNewEffectData(item);
+            statGainEffect = new CreateNewEffectData(item,ScriptableObject.CreateInstance<StatGainEffect>());
+            spawnEffect= new CreateNewEffectData(item,ScriptableObject.CreateInstance<SpawnEffect>());
+            
             tree.Add("New StatGain", statGainEffect);
             tree.Add("New Spawn", spawnEffect);
-            tree.Add("New Custom", customEffect);
             tree.AddAllAssetsAtPath(Item.Name, AssetUtil.GetItemFolderPath(Item.Name), typeof(ItemEffect));
             
 
@@ -47,7 +47,6 @@ namespace Game.Editor
             base.OnDestroy();
             DestroyImmediate(statGainEffect.EffectData);
             DestroyImmediate(spawnEffect.EffectData);
-            DestroyImmediate(customEffect.EffectData);
         }
 
         public static void ForceTreeRebuild(){
@@ -57,9 +56,12 @@ namespace Game.Editor
 
     public class CreateNewEffectData
     {
-        public CreateNewEffectData(ItemTableViewData item)
+        public CreateNewEffectData(ItemTableViewData item, ScriptableObject instance)
         {
-            EffectData = ScriptableObject.CreateInstance<StatGainEffect>();
+            if (!(instance is ItemEffect effect))
+                return;
+
+            EffectData = effect;
             this.item = item;
         }
 

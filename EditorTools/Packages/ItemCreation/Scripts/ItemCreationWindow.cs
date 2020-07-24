@@ -229,7 +229,7 @@ namespace Game.Editor
             }
             newItem.Name = Name;
             newItem.Icon = Icon;
-            //newItem.Effects = Effects;
+            newItem.Effects = Effects;
             newItem.Description = Description;
             newItem.Category = Category;
             newItem.Rarity = Rarity;
