@@ -59,7 +59,7 @@ namespace Game.Base
                 //create new Folder
                 AssetDatabase.CreateFolder(ITEM_SO_FOLDER_PATH, fileName);
             }
-            AssetDatabase.CreateAsset(newEffect, ITEM_SO_PATH + fileName + "/" + "z_" + effectName + ".asset");
+            AssetDatabase.CreateAsset(newEffect, ITEM_SO_PATH + fileName + "/" +fileName.ToShortVersion()+"_"+ effectName + ".asset");
             AssetDatabase.SaveAssets();
             return true;
         }
