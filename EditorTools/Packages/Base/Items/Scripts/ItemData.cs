@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+// ReSharper disable PublicField
 
 namespace Game.Base
 {
@@ -16,6 +17,8 @@ namespace Game.Base
         public string ShortDescription;
         
         public string FullDescription;
+
+        public List<EffectExplanation> EffectExplanations;
 
         public ItemCategory Category; 
 
