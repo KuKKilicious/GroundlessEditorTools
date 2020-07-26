@@ -31,4 +31,9 @@ namespace Game.Base
     {
         MaxHP, CurrentHP, MaxShield, Shield, AttackSpeed, AttackDamage, CritDamage, CritPercentage, GoldGain, SplashDamage, RarityChance, AbilityAmp, LifeLeech
     }
+
+    public enum EffectExplanation
+    {
+        Stun, Root, NeonOrb, NeonSpear, NeonBomb,NeonTrail, NeonSpirit,NeonBeam,Charm
+    }
 }

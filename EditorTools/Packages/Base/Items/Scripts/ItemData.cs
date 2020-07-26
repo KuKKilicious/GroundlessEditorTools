@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+// ReSharper disable PublicField
 
 namespace Game.Base
 {
@@ -11,12 +11,17 @@ namespace Game.Base
 
         public string Name;
 
-        public IItemEffect[] Effects; //TODO: Use Effect Data
+        public List<ItemEffect> Effects; 
+        
+        public string ShortDescription;
+        
+        public string FullDescription;
 
-        public string Description;
+        public List<EffectExplanation> EffectExplanations;
 
-        public ItemCategory Category; //TODO: Use category Enum 
+        public ItemCategory Category; 
 
-        public ItemRarity Rarity; //TODO: Use rarity Enum 
+        public ItemRarity Rarity; 
+
     }
 }

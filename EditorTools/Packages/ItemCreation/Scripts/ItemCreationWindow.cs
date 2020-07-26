@@ -13,7 +13,6 @@ using System.ComponentModel;
 
 namespace Game.Editor
 {
-
     public enum SortType
     {
         Name, Category, Rarity
@@ -30,11 +29,38 @@ namespace Game.Editor
             GetWindow<ItemCreationWindow>().Show();
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            if (EditorUtility.DisplayDialog("Save", "Do you want to save?", "Yes", "No"))
+            {
+                SaveAll();
+            }
+        }
         [PropertyOrder(-10), HorizontalGroup("Top", 0.4f, MinWidth = 100, MaxWidth = 1000, LabelWidth = 100)]
         [Button(ButtonSizes.Large, ButtonStyle.FoldoutButton, Expanded = true)]
         public void Search(string searchTerm)
         {
+            List<ItemTableViewData> searchResults = new List<ItemTableViewData>();
+            foreach (var item in itemTable)
+            {
+                if (item.Name.Contains(searchTerm)
+                    || item.ShortDescription.Contains(searchTerm)
+                    || item.FullDescription.Contains(searchTerm)
+                    || item.Category.ToString().Contains(searchTerm)
+                    || item.Rarity.ToString().Contains(searchTerm)
+                )
+                {
+                    searchResults.Add(item);
+                }
+            }
 
+            if (searchResults.Count <= 0)
+            {
+                EditorUtility.DisplayDialog("Search", "No search results for given search term", "OK");
+            }
+            itemTable = searchResults;
         }
 
 
@@ -55,7 +81,7 @@ namespace Game.Editor
 
 
 
-            if (!AssetUtil.SaveItemAsset(newItem)) { return; }; //return if unsuccessful
+            if (!AssetUtil.SaveAsset(newItem)) { return; }; //return if unsuccessful
             //Create ViewData
 
             itemTable.Add(new ItemTableViewData(itemName));
@@ -78,7 +104,6 @@ namespace Game.Editor
                 {
                     itemTable = itemTable.OrderBy(o => o.Name).ToList();
 
-                    var bla = SortType.Name;
                     break;
                 }
                 case (SortType.Category):
@@ -113,7 +138,9 @@ namespace Game.Editor
         public void LoadAll()
         {
             //TODO: Check if sure?
-
+            var toClear = EditorUtility.DisplayDialog("Confirmation", "Are you sure to load all?", "Yes", "No");
+            if (!toClear)
+                return;
             itemTable.Clear();
 
             ItemData[] items = AssetUtil.LoadItemAssets();
@@ -122,7 +149,7 @@ namespace Game.Editor
 
             foreach (var item in items)
             {
-                itemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.Category, item.Rarity));
+                itemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.ShortDescription, item.FullDescription, item.EffectExplanations, item.Category, item.Rarity));
             }
 
         }
@@ -132,6 +159,10 @@ namespace Game.Editor
         [Button(ButtonSizes.Large)]
         public void Clear()
         {
+            var toClear = EditorUtility.DisplayDialog("Confirmation", "Are you sure to clear list?", "Yes", "No");
+            if (!toClear)
+                return;
+
             itemTable.Clear();
         }
 
@@ -140,13 +171,10 @@ namespace Game.Editor
         [SerializeField]
         private List<ItemTableViewData> itemTable = new List<ItemTableViewData>();
 
-        //         [OnInspectorGUI]
-        //         public void OnInspectorGUIUpdate()
-        //         {
-        //             Debug.Log("");
-        // 
-        //         }
-
+        protected override void OnGUI()
+        {
+            base.OnGUI();
+        }
     }
 
 
@@ -158,77 +186,96 @@ namespace Game.Editor
         {
             this.Name = name;
         }
-        public ItemTableViewData(string name, Texture icon, IItemEffect[] effects, string description, ItemCategory category, ItemRarity rarity)
+        public ItemTableViewData(string name, Texture icon, List<ItemEffect> effects, string shortDescription, string fullDescription, List<EffectExplanation> explanations, ItemCategory category, ItemRarity rarity)
         {
             this.Name = name;
+            this.oldName = name;
             this.Icon = icon;
             this.Effects = effects;
-            this.Description = description;
+            this.ShortDescription = shortDescription;
+            this.FullDescription = fullDescription;
+            this.Explanations = explanations;
             this.Category = category;
             this.Rarity = rarity;
         }
         [PreviewField]
         [TableColumnWidth(64, Resizable = false)]
+        [PropertyOrder(0)]
         public Texture Icon;
 
-        [TableColumnWidth(40), OnValueChanged("NameChanged")] //TODO: set dirty /w OnValueChanged to apply new fileName when saving
+        [TableColumnWidth(120)]
+        [PropertyOrder(1)]
         public string Name;
-        
+
         [AssetsOnly]
-        public IItemEffect[] Effects; //TODO: Use Effect Data
-        
-        [TableColumnWidth(80)]
-        public ItemEffectViewData[] itemEffect;
+        [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000, HideToolbar = true)]//TODO: Remove the X in the list OR make X also delete Scriptable Object 
+        [TableColumnWidth(500)]
+        [InlineEditor]
+        [PropertyOrder(2)]
+        public List<ItemEffect> Effects;
 
-        [TextArea(2, 10)]
-        public string Description;
-
-        [TableColumnWidth(20)]
-        public ItemCategory Category; 
-
-        [TableColumnWidth(20)]
+        [Button(ButtonSizes.Medium, Name = "Details")]
+        [TableColumnWidth(60, Resizable = false)]
+        [PropertyOrder(3)]
+        public void Details()
+        {
+            EffectCreationWindow.Item = this;
+            EffectCreationWindow.OpenWindow(this);
+        }
+        [TableColumnWidth(150)]
+        [TextArea(2, 5)]
+        [PropertyOrder(4)]
+        public string ShortDescription;
+        [TableColumnWidth(300)]
+        [TextArea(5, 10)]
+        [PropertyOrder(5)]
+        public string FullDescription;
+        [TableColumnWidth(200)]
+        [PropertyOrder(7)]
+        [ListDrawerSettings(Expanded = true)]
+        public List<EffectExplanation> Explanations;
+        [PropertyOrder(10)]
+        [TableColumnWidth(100, Resizable = false)]
+        public ItemCategory Category;
+        [PropertyOrder(11)]
+        [TableColumnWidth(100, Resizable = false)]
         public ItemRarity Rarity;
 
-        [Button(ButtonSizes.Large)]
+        [Button(ButtonSizes.Medium)]
+        [TableColumnWidth(60, Resizable = false)]
+        [PropertyOrder(15)]
         [ResponsiveButtonGroup("Actions")]
         public void Save()
         {
             //Create SO
             ItemData newItem = ScriptableObject.CreateInstance<ItemData>();
             //if new name, delete old asset
-            if (nameChanged)
+            if (!oldName.Equals(Name))
             {
-                //AssetUtil.DeleteItemAsset();
+                //TODO: Delete Asset
+                AssetUtil.DeleteItemAsset(oldName.ToTitleCase());
+                oldName = Name;
             }
             newItem.Name = Name;
             newItem.Icon = Icon;
             newItem.Effects = Effects;
-            newItem.Description = Description;
+            newItem.ShortDescription = ShortDescription;
+            newItem.FullDescription = FullDescription;
             newItem.Category = Category;
             newItem.Rarity = Rarity;
-            AssetUtil.SaveItemAsset(newItem);
+            AssetUtil.SaveAsset(newItem);
 
-            //reset flags
-            nameChanged = false;
         }
 
-        [Button(ButtonSizes.Large)]
-        [ResponsiveButtonGroup("Actions")]
-        public void Revert()
-        {
-            
-        }
+        //         [Button(ButtonSizes.Large)]
+        //         [ResponsiveButtonGroup("Actions")]
+        //         public void Revert()
+        //         {
+        //             
+        //         }
 
-        private bool nameChanged = false;
-
-        private void NameChanged() {nameChanged = true; } //Called by OnValueChanged of Name
+        private string oldName = "";
     }
-    [System.Serializable]
-    public class ItemEffectViewData
-    {
-        
-        public ItemEffect effect;
 
-        //effect (Launch Projectile)
-    }
+
 }
