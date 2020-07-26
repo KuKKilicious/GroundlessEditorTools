@@ -149,7 +149,7 @@ namespace Game.Editor
 
             foreach (var item in items)
             {
-                itemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.ShortDescription,item.FullDescription, item.EffectExplanations,item.Category, item.Rarity));
+                itemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.ShortDescription, item.FullDescription, item.EffectExplanations, item.Category, item.Rarity));
             }
 
         }
@@ -171,6 +171,10 @@ namespace Game.Editor
         [SerializeField]
         private List<ItemTableViewData> itemTable = new List<ItemTableViewData>();
 
+        protected override void OnGUI()
+        {
+            base.OnGUI();
+        }
     }
 
 
@@ -182,7 +186,7 @@ namespace Game.Editor
         {
             this.Name = name;
         }
-        public ItemTableViewData(string name, Texture icon, List<ItemEffect> effects,string shortDescription, string fullDescription, List<EffectExplanation> explanations,ItemCategory category, ItemRarity rarity)
+        public ItemTableViewData(string name, Texture icon, List<ItemEffect> effects, string shortDescription, string fullDescription, List<EffectExplanation> explanations, ItemCategory category, ItemRarity rarity)
         {
             this.Name = name;
             this.oldName = name;
@@ -228,7 +232,7 @@ namespace Game.Editor
         public string FullDescription;
         [TableColumnWidth(200)]
         [PropertyOrder(7)]
-        [ListDrawerSettings(Expanded =true)]
+        [ListDrawerSettings(Expanded = true)]
         public List<EffectExplanation> Explanations;
         [PropertyOrder(10)]
         [TableColumnWidth(100, Resizable = false)]

@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Game.Editor
 {
-
     public class EffectCreationWindow : OdinMenuEditorWindow
     {
         private static ItemTableViewData s_item;
@@ -17,18 +16,21 @@ namespace Game.Editor
 
         private CreateNewEffectData statGainEffect;
         private CreateNewEffectData spawnEffect;
-
+        private CreateNewEffectData usableEffect;
 
         protected override OdinMenuTree BuildMenuTree()
         {
             var tree = new OdinMenuTree();
             if (Item == null || Item.Name.Length == 0) { return null; }
-
+            //create temporary scriptable objects
             statGainEffect = new CreateNewEffectData(s_item,ScriptableObject.CreateInstance<StatGainEffect>());
             spawnEffect= new CreateNewEffectData(s_item,ScriptableObject.CreateInstance<SpawnEffect>());
-            
+            usableEffect= new CreateNewEffectData(s_item,ScriptableObject.CreateInstance<UsableEffect>());
+
+            //create trees and display assets
             tree.Add("New StatGain", statGainEffect);
             tree.Add("New Spawn", spawnEffect);
+            tree.Add("New Usable", usableEffect);
             tree.AddAllAssetsAtPath(Item.Name, AssetUtil.GetItemFolderPath(Item.Name), typeof(ItemEffect));
             
 
@@ -44,8 +46,10 @@ namespace Game.Editor
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            //destroy temporary so
             DestroyImmediate(statGainEffect.EffectData);
             DestroyImmediate(spawnEffect.EffectData);
+            DestroyImmediate(usableEffect.EffectData);
         }
 
         public static void ForceTreeRebuild(){
@@ -92,3 +96,5 @@ namespace Game.Editor
         }
     }
 }
+
+
