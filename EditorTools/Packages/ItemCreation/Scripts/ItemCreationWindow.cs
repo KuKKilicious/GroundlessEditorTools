@@ -150,7 +150,7 @@ namespace Game.Editor
 
             foreach (var item in items)
             {
-                itemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.ShortDescription,item.FullDescription, item.Category, item.Rarity));
+                itemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.ShortDescription,item.FullDescription, item.EffectExplanations,item.Category, item.Rarity));
             }
 
         }
@@ -183,7 +183,7 @@ namespace Game.Editor
         {
             this.Name = name;
         }
-        public ItemTableViewData(string name, Texture icon, List<ItemEffect> effects,string shortDescription, string fullDescription, ItemCategory category, ItemRarity rarity)
+        public ItemTableViewData(string name, Texture icon, List<ItemEffect> effects,string shortDescription, string fullDescription, List<EffectExplanation> explanations,ItemCategory category, ItemRarity rarity)
         {
             this.Name = name;
             this.oldName = name;
@@ -191,6 +191,7 @@ namespace Game.Editor
             this.Effects = effects;
             this.ShortDescription = shortDescription;
             this.FullDescription = fullDescription;
+            this.Explanations = explanations;
             this.Category = category;
             this.Rarity = rarity;
         }
@@ -226,7 +227,10 @@ namespace Game.Editor
         [TextArea(5, 10)]
         [PropertyOrder(5)]
         public string FullDescription;
-
+        [TableColumnWidth(200)]
+        [PropertyOrder(7)]
+        [ListDrawerSettings(Expanded =true)]
+        public List<EffectExplanation> Explanations;
         [PropertyOrder(10)]
         [TableColumnWidth(100, Resizable = false)]
         public ItemCategory Category;
