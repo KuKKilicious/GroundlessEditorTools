@@ -1,7 +1,6 @@
 ﻿using Game.Base;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
-using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,10 +9,10 @@ namespace Game.Editor
 
     public class EffectCreationWindow : OdinMenuEditorWindow
     {
-        private static ItemTableViewData item;
+        private static ItemTableViewData s_item;
         public static ItemTableViewData Item {
-            get => item;
-            set => item = value;
+            get => s_item;
+            set => s_item = value;
         }
 
         private CreateNewEffectData statGainEffect;
@@ -25,8 +24,8 @@ namespace Game.Editor
             var tree = new OdinMenuTree();
             if (Item == null || Item.Name.Length == 0) { return null; }
 
-            statGainEffect = new CreateNewEffectData(item,ScriptableObject.CreateInstance<StatGainEffect>());
-            spawnEffect= new CreateNewEffectData(item,ScriptableObject.CreateInstance<SpawnEffect>());
+            statGainEffect = new CreateNewEffectData(s_item,ScriptableObject.CreateInstance<StatGainEffect>());
+            spawnEffect= new CreateNewEffectData(s_item,ScriptableObject.CreateInstance<SpawnEffect>());
             
             tree.Add("New StatGain", statGainEffect);
             tree.Add("New Spawn", spawnEffect);

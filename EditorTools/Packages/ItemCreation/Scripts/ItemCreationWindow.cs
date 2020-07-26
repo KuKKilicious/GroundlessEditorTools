@@ -13,7 +13,6 @@ using System.ComponentModel;
 
 namespace Game.Editor
 {
-
     public enum SortType
     {
         Name, Category, Rarity

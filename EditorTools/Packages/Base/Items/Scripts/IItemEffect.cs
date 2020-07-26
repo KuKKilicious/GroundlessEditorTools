@@ -1,8 +1,5 @@
-﻿using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿using UnityEngine;
+// ReSharper disable PublicField
 namespace Game.Base
 {
     public interface IItemEffect
@@ -19,15 +16,15 @@ namespace Game.Base
     [System.Serializable]
     public abstract class ItemEffect : ScriptableObject
     {
-        public EffectSource source;
-        public EffectTarget target;
-        public EffectTrigger trigger;
+        public EffectSource Source;
+        public EffectTarget Target;
+        public EffectTrigger Trigger;
 
     }
 
     public class SpawnEffect : ItemEffect
     {
-        public GameObject objectToSpawn;
+        public GameObject ObjectToSpawn;
     }
 
 
