@@ -13,8 +13,6 @@ namespace Game.Base
     /// </summary>
     public static class AssetUtil
     {
-        private static string ITEM_SO_PATH = "Assets/Items/";
-        private static string ITEM_SO_FOLDER_PATH = "Assets/Items";
 
         /// <summary>
         /// saves Item Scriptable Object via AssetDatabase in the project
@@ -23,6 +21,7 @@ namespace Game.Base
         /// <returns>true if successful</returns>
         public static bool SaveAsset(ItemData newItem)
         {
+            string itemPath = GroundlessSettings.GetOrCreateSettings().ItemPath;
             //format string
             string fileName = newItem.Name.ToTitleCase();
             fileName = fileName.Replace(" ", "");
@@ -33,17 +32,18 @@ namespace Game.Base
                 return false;
             }
             //check if Folder already exists
-            if (!AssetDatabase.IsValidFolder(ITEM_SO_PATH + fileName))
+            if (!AssetDatabase.IsValidFolder(itemPath + "/"+ fileName))
             {
                 //create new Folder
-                AssetDatabase.CreateFolder(ITEM_SO_FOLDER_PATH, fileName);
+                AssetDatabase.CreateFolder(itemPath, fileName);
             }
-            AssetDatabase.CreateAsset(newItem, ITEM_SO_PATH + fileName + "/" + fileName + ".asset");
+            AssetDatabase.CreateAsset(newItem, itemPath+ "/"+ fileName + "/" + fileName + ".asset");
             AssetDatabase.SaveAssets();
             return true;
         }
         public static bool SaveAsset(ItemEffect newEffect,string itemName,string effectName)
         {
+            string itemPath = GroundlessSettings.GetOrCreateSettings().ItemPath;
             //format string
             string fileName = itemName.ToTitleCase();
             fileName = fileName.Replace(" ", "");
@@ -54,12 +54,12 @@ namespace Game.Base
                 return false;
             }
             //check if Folder already exists
-            if (!AssetDatabase.IsValidFolder(ITEM_SO_PATH + fileName))
+            if (!AssetDatabase.IsValidFolder(itemPath + "/"+ fileName))
             {
                 //create new Folder
-                AssetDatabase.CreateFolder(ITEM_SO_FOLDER_PATH, fileName);
+                AssetDatabase.CreateFolder(itemPath, fileName);
             }
-            AssetDatabase.CreateAsset(newEffect, ITEM_SO_PATH + fileName + "/" +fileName.ToShortVersion()+"_"+ effectName + ".asset");
+            AssetDatabase.CreateAsset(newEffect, itemPath + "/"+ fileName + "/" +fileName.ToShortVersion()+"_"+ effectName + ".asset");
             AssetDatabase.SaveAssets();
             return true;
         }
@@ -70,10 +70,11 @@ namespace Game.Base
         [CanBeNull]
         public static ItemData[] LoadItemAssets()
         {
+            string itemPath = GroundlessSettings.GetOrCreateSettings().ItemPath;
             List<ItemData> items = new List<ItemData>();
             try
             {
-                string[] assetsGuid = AssetDatabase.FindAssets("t:ItemData", new[] { ITEM_SO_FOLDER_PATH });
+                string[] assetsGuid = AssetDatabase.FindAssets("t:ItemData", new[] { itemPath });
 
                 if (assetsGuid == null || assetsGuid.Length <= 0) { return null; } //return if folder doesn't contain items
 
@@ -89,17 +90,19 @@ namespace Game.Base
 
         public static void DeleteItemAsset(string fileName)
         {
-            AssetDatabase.DeleteAsset(ITEM_SO_FOLDER_PATH + "/" + fileName + ".asset");
+            string itemPath = GroundlessSettings.GetOrCreateSettings().ItemPath;
+            AssetDatabase.DeleteAsset(itemPath + "/" + fileName + ".asset");
         }
 
         public static string GetItemFolderPath(string name)
         {
+            string itemPath = GroundlessSettings.GetOrCreateSettings().ItemPath;
             var folderName = name.ToTitleCase();
 
             string path = "";
-            if (!AssetDatabase.IsValidFolder(ITEM_SO_PATH + folderName)) { return null; }
+            if (!AssetDatabase.IsValidFolder(itemPath + "/"+ folderName)) { return null; }
 
-            path = ITEM_SO_PATH + folderName;
+            path = itemPath + "/"+ folderName;
             return path;
         }
     }
