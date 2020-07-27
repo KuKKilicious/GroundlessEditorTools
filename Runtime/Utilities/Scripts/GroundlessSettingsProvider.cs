@@ -5,33 +5,37 @@ using UnityEditor;
 using UnityEditor.Graphs;
 using UnityEngine;
 using UnityEngine.UIElements;
-
-// Register a SettingsProvider using IMGUI for the drawing framework:
-static class  GroundlessSettingsIMGUIRegister
+namespace Game.Settings
 {
-    [SettingsProvider]
-    public static SettingsProvider CreateGroundlessSettingsProvider()
+    // Register a SettingsProvider using IMGUI for the drawing framework:
+    static class GroundlessSettingsIMGUIRegister
     {
-        // First parameter is the path in the Settings window.
-        // Second parameter is the scope of this setting: it only appears in the Project Settings window.
-        var provider = new SettingsProvider("Project/GroundlessSettings", SettingsScope.Project)
+        [SettingsProvider]
+        public static SettingsProvider CreateGroundlessSettingsProvider()
         {
-            // By default the last token of the path is used as display name if no label is provided.
-            label = "Groundless",
-            // Create the SettingsProvider and initialize its drawing (IMGUI) function in place:
-            guiHandler = (searchContext) =>
+            // First parameter is the path in the Settings window.
+            // Second parameter is the scope of this setting: it only appears in the Project Settings window.
+            var provider = new SettingsProvider("Project/GroundlessSettings", SettingsScope.Project)
             {
-                var settings =  GroundlessSettings.GetSerializedSettings();
-                EditorGUILayout.PropertyField(settings.FindProperty("autoSave"), new GUIContent("Auto Save Items"));
-                EditorGUILayout.PropertyField(settings.FindProperty("itemPath"), new GUIContent("Item Folder path"));
-            },
+                // By default the last token of the path is used as display name if no label is provided.
+                label = "Groundless",
+                // Create the SettingsProvider and initialize its drawing (IMGUI) function in place:
+                guiHandler = (searchContext) =>
+                {
+                    var settings = GroundlessSettings.GetSerializedSettings();
+                    EditorGUILayout.PropertyField(settings.FindProperty("saveOptionWhenLoadingOrQuitting"),new GUIContent("Ask to Save on Load/Quit"));
+                    EditorGUILayout.PropertyField(settings.FindProperty("itemPath"), new GUIContent("Item Folder path"));
+                },
 
-            // Populate the search keywords to enable smart search filtering and label highlighting:
-            keywords = new HashSet<string>(new[] { "Auto Save", "Item Folder","items" })
-        };
+                // Populate the search keywords to enable smart search filtering and label highlighting:
+                keywords = new HashSet<string>(new[] { "Auto Save", "Item Folder", "items" })
+            };
 
-        return provider;
+            return provider;
+        }
+
     }
+
 }
 
 
