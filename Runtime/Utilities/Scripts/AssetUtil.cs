@@ -42,6 +42,7 @@ namespace Game.Base
             AssetDatabase.SaveAssets();
             return true;
         }
+
         public static bool SaveAsset(ItemEffect newEffect,string itemName,string effectName)
         {
             string itemPath = GroundlessSettings.GetOrCreateSettings().ItemPath;

@@ -23,7 +23,7 @@ namespace Game.Settings
                 guiHandler = (searchContext) =>
                 {
                     var settings = GroundlessSettings.GetSerializedSettings();
-                    EditorGUILayout.PropertyField(settings.FindProperty("saveOptionWhenLoadingOrQuitting"),new GUIContent("Ask to Save on Load/Quit"));
+                    EditorGUILayout.PropertyField(settings.FindProperty("confirmWhenLoadingOrQuitting"),new GUIContent("Confirmation on Load/Quit"));
                     EditorGUILayout.PropertyField(settings.FindProperty("itemPath"), new GUIContent("Item Folder path"));
                     settings.ApplyModifiedProperties();
                 },

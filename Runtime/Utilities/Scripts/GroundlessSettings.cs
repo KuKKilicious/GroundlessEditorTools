@@ -15,13 +15,13 @@ namespace Game.Settings
 #pragma warning disable 414 //used by GroundlessSettingsProvider
         [Header("Item Creation Window Settings")]
         [SerializeField]
-        private bool saveOptionWhenLoadingOrQuitting;
+        private bool confirmWhenLoadingOrQuitting;
         [SerializeField]
         [Tooltip("Enter desired item folder path")]
         private string itemPath = "Assets/Items";
 #pragma warning restore 414
 
-        public bool SaveOptionWhenLoadingOrQuitting => saveOptionWhenLoadingOrQuitting;
+        public bool ConfirmWhenLoadingOrQuitting => confirmWhenLoadingOrQuitting;
         public string ItemPath => itemPath;
 
         public static GroundlessSettings GetOrCreateSettings()
@@ -30,7 +30,7 @@ namespace Game.Settings
             if (settings == null)
             {
                 settings = ScriptableObject.CreateInstance<GroundlessSettings>();
-                settings.saveOptionWhenLoadingOrQuitting = true;
+                settings.confirmWhenLoadingOrQuitting = true;
                 settings.itemPath = "Assets/Items";
                 AssetDatabase.CreateAsset(settings, k_MyCustomSettingsPath);
                 AssetDatabase.SaveAssets();

@@ -32,7 +32,7 @@ namespace Game.Editor
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            if (GroundlessSettings.GetOrCreateSettings().SaveOptionWhenLoadingOrQuitting)
+            if (GroundlessSettings.GetOrCreateSettings().ConfirmWhenLoadingOrQuitting)
             {
                 if (EditorUtility.DisplayDialog("Save", "Do you want to save?", "Yes", "No"))
                 {
@@ -143,7 +143,7 @@ namespace Game.Editor
         public void LoadAll()
         {
 
-            if (GroundlessSettings.GetOrCreateSettings().SaveOptionWhenLoadingOrQuitting)
+            if (GroundlessSettings.GetOrCreateSettings().ConfirmWhenLoadingOrQuitting)
             {
                 //Check if sure
                 var toClear = EditorUtility.DisplayDialog("Confirmation", "Are you sure to load all?", "Yes", "No");
