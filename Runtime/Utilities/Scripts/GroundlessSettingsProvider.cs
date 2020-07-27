@@ -25,6 +25,7 @@ namespace Game.Settings
                     var settings = GroundlessSettings.GetSerializedSettings();
                     EditorGUILayout.PropertyField(settings.FindProperty("saveOptionWhenLoadingOrQuitting"),new GUIContent("Ask to Save on Load/Quit"));
                     EditorGUILayout.PropertyField(settings.FindProperty("itemPath"), new GUIContent("Item Folder path"));
+                    settings.ApplyModifiedProperties();
                 },
 
                 // Populate the search keywords to enable smart search filtering and label highlighting:

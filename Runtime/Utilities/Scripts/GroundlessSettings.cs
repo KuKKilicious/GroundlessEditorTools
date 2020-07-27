@@ -12,15 +12,15 @@ namespace Game.Settings
 
         public const string k_MyCustomSettingsPath = "Assets/Settings/GroundlessSettings.asset";
 
-#pragma warning disable 414 //used by EditorToolsSettingsProvider
+#pragma warning disable 414 //used by GroundlessSettingsProvider
         [Header("Item Creation Window Settings")]
         [SerializeField]
         private bool saveOptionWhenLoadingOrQuitting;
         [SerializeField]
         [Tooltip("Enter desired item folder path")]
         private string itemPath = "Assets/Items";
-
 #pragma warning restore 414
+
         public bool SaveOptionWhenLoadingOrQuitting => saveOptionWhenLoadingOrQuitting;
         public string ItemPath => itemPath;
 
