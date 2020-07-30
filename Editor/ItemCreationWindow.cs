@@ -96,7 +96,7 @@ namespace Game.Editor
         [Button(ButtonSizes.Small)]
         public void Settings()
         {
-            EditorUtility.DisplayDialog("Not implemented yet", "Go to Edit > Project Settings > Groundless to edit settings. (I can't figure out how to display that particular window)", "OK");
+            EditorUtility.DisplayDialog("Not implemented yet", "Go to Edit > Project Settings > Groundless to edit settings.", "OK");
         }
 
         [HorizontalGroup("Top", 0.0f, MinWidth = 100, MaxWidth = 3100, LabelWidth = 100)]
