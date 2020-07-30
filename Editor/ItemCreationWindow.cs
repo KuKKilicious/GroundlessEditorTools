@@ -9,7 +9,7 @@ using UnityEditor;
 using Game.Base;
 using Game.Base.Utilities;
 using System.Linq;
-using System.ComponentModel;
+using Game.Settings;
 
 namespace Game.Editor
 {
@@ -32,10 +32,12 @@ namespace Game.Editor
         protected override void OnDestroy()
         {
             base.OnDestroy();
-
-            if (EditorUtility.DisplayDialog("Save", "Do you want to save?", "Yes", "No"))
+            if (GroundlessSettings.GetOrCreateSettings().ConfirmWhenLoadingOrQuitting)
             {
-                SaveAll();
+                if (EditorUtility.DisplayDialog("Save", "Do you want to save?", "Yes", "No"))
+                {
+                    SaveAll();
+                }
             }
         }
         [PropertyOrder(-10), HorizontalGroup("Top", 0.4f, MinWidth = 100, MaxWidth = 1000, LabelWidth = 100)]
@@ -92,7 +94,10 @@ namespace Game.Editor
         //TODO: replace with settings icon
         [HorizontalGroup("Top", 0.1f, MarginLeft = 0.1f, MinWidth = 100, MaxWidth = 300)]
         [Button(ButtonSizes.Small)]
-        public void Settings() { }
+        public void Settings()
+        {
+            EditorUtility.DisplayDialog("Not implemented yet", "Go to Edit > Project Settings > Groundless to edit settings.", "OK");
+        }
 
         [HorizontalGroup("Top", 0.0f, MinWidth = 100, MaxWidth = 3100, LabelWidth = 100)]
         [Button(ButtonSizes.Small, ButtonStyle.FoldoutButton, Expanded = true)]
@@ -137,10 +142,14 @@ namespace Game.Editor
         [Button(ButtonSizes.Large)]
         public void LoadAll()
         {
-            //TODO: Check if sure?
-            var toClear = EditorUtility.DisplayDialog("Confirmation", "Are you sure to load all?", "Yes", "No");
-            if (!toClear)
-                return;
+
+            if (GroundlessSettings.GetOrCreateSettings().ConfirmWhenLoadingOrQuitting)
+            {
+                //Check if sure
+                var toClear = EditorUtility.DisplayDialog("Confirmation", "Are you sure to load all?", "Yes", "No");
+                if (!toClear)
+                    return;
+            }
             itemTable.Clear();
 
             ItemData[] items = AssetUtil.LoadItemAssets();
