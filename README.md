@@ -33,15 +33,15 @@ Path Settings can be edited by going to **Edit->Project Settings->Groundless** i
 
 #### Major
 
- deleting effect from effects list will not delete linked generated object
+* deleting effect from effects list will not delete linked generated object
 
 #### Minor
 
-Error: BeginLayoutGroup must be called first(seems to happen inside of OnGui of Odins codebase)
+* Error: BeginLayoutGroup must be called first(seems to happen inside of OnGui of Odins codebase)
 
-Error: When EffectCreationWindow was still open when recompiling
+* Error: When EffectCreationWindow was still open when recompiling
 
-Unity Project Settings can not be opened from within the item creation window
+* Unity Project Settings can not be opened from within the item creation window
 
 ### Credits
 
