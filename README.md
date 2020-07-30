@@ -43,6 +43,8 @@ Path Settings can be edited by going to **Edit->Project Settings->Groundless** i
 
 * Unity Project Settings can not be opened from within the item creation window
 
+* Item Creation Window is a little big
+
 ### Credits
 
 Carsten Gedrat https://github.com/KuKKilicious
