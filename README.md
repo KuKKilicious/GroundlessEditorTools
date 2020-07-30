@@ -39,7 +39,7 @@ Path Settings can be edited by going to **Edit->Project Settings->Groundless** i
 
 * Error: BeginLayoutGroup must be called first(seems to happen inside of OnGui of Odins codebase)
 
-* Error: When EffectCreationWindow was still open when recompiling
+* Error: When EffectCreationWindow was still open when recompiling showing OnGui errors
 
 * Unity Project Settings can not be opened from within the item creation window
 
