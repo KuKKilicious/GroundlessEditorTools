@@ -27,6 +27,10 @@ namespace Game.Settings
         public bool ConfirmWhenLoadingOrQuitting => confirmWhenLoadingOrQuitting;
         public string ItemPath => itemPath;
 
+        /// <summary>
+        /// creates groundless settings object
+        /// </summary>
+        /// <returns>Settings objects</returns>
         public static GroundlessSettings GetOrCreateSettings()
         {
             var settings = AssetDatabase.LoadAssetAtPath<GroundlessSettings>(k_GroundlessSettingsPath);
@@ -40,14 +44,6 @@ namespace Game.Settings
                 //Check if folder exists
                 if (!AssetDatabase.IsValidFolder(Path.GetDirectoryName(k_GroundlessSettingsPath)))
                 {
-
-                    string t1 = Directory.GetParent(folderPath).Name;
-                    string t2 = Path.GetDirectoryName(folderPath);
-                    string t3 = Path.GetFileName(folderPath);
-                    string t4 = Path.GetPathRoot(folderPath);
-                    string t5 = new FileInfo(folderPath ?? throw new InvalidOperationException())?.DirectoryName;
-                    string t6 = new FileInfo(folderPath)?.Directory?.Name;
-
                     //create Folder
                     AssetDatabase.CreateFolder(Path.GetDirectoryName(folderPath), Path.GetFileName(folderPath));
                 };
