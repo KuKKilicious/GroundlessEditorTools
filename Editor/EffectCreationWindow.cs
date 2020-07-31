@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Game.Editor
 {
+    /// <summary>
+    /// Window to create effects for particular item
+    /// </summary>
     public class EffectCreationWindow : OdinMenuEditorWindow
     {
         private static ItemTableViewData s_item;
@@ -56,7 +59,10 @@ namespace Game.Editor
             GetWindow<EffectCreationWindow>().ForceMenuTreeRebuild();
         }
     }
-
+    /// <summary>
+    /// Effect Data that is visualized in Window
+    /// </summary>
+    [System.Serializable]
     public class CreateNewEffectData
     {
         public CreateNewEffectData(ItemTableViewData item, ScriptableObject instance)

@@ -17,6 +17,9 @@ namespace Game.Editor
     {
         Name, Category, Rarity
     }
+    /// <summary>
+    /// Window to create Items
+    /// </summary>
     public class ItemCreationWindow : OdinEditorWindow
     {
         private SortType currentSortType;
@@ -186,11 +189,12 @@ namespace Game.Editor
         }
     }
 
-
+    /// <summary>
+    /// Item Data that is visualized in Window
+    /// </summary>
     [System.Serializable]
     public class ItemTableViewData
     {
-
         public ItemTableViewData(string name)
         {
             this.Name = name;
@@ -235,17 +239,21 @@ namespace Game.Editor
         [TextArea(2, 5)]
         [PropertyOrder(4)]
         public string ShortDescription;
+
         [TableColumnWidth(300)]
         [TextArea(5, 10)]
         [PropertyOrder(5)]
         public string FullDescription;
+
         [TableColumnWidth(200)]
         [PropertyOrder(7)]
         [ListDrawerSettings(Expanded = true)]
         public List<EffectExplanation> Explanations;
+
         [PropertyOrder(10)]
         [TableColumnWidth(100, Resizable = false)]
         public ItemCategory Category;
+
         [PropertyOrder(11)]
         [TableColumnWidth(100, Resizable = false)]
         public ItemRarity Rarity;
@@ -270,18 +278,12 @@ namespace Game.Editor
             newItem.Effects = Effects;
             newItem.ShortDescription = ShortDescription;
             newItem.FullDescription = FullDescription;
+            newItem.EffectExplanations = Explanations;
             newItem.Category = Category;
             newItem.Rarity = Rarity;
             AssetUtil.SaveAsset(newItem);
 
         }
-
-        //         [Button(ButtonSizes.Large)]
-        //         [ResponsiveButtonGroup("Actions")]
-        //         public void Revert()
-        //         {
-        //             
-        //         }
 
         private string oldName = "";
     }
