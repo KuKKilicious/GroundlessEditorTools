@@ -24,7 +24,7 @@ namespace Game.Base
     }
     public enum EffectSource
     {
-        Self, Ground, ClosestTarget, FurthestTarget, RandomTarget
+        Self, Sword, Ground, ClosestTarget, FurthestTarget, RandomTarget
     }
 
     public enum StatType
@@ -34,6 +34,6 @@ namespace Game.Base
 
     public enum EffectExplanation
     {
-        Stun, Root, NeonOrb, NeonSpear, NeonBomb,NeonTrail, NeonSpirit,NeonBeam,Charm
+        Stun, Root, NeonOrb, NeonSpear, NeonBomb,NeonTrail, NeonSpirit,NeonBeam,Charm, NeonWave
     }
 }

@@ -17,6 +17,9 @@ namespace Game.Editor
     {
         Name, Category, Rarity
     }
+    /// <summary>
+    /// Window to create Items
+    /// </summary>
     public class ItemCreationWindow : OdinEditorWindow
     {
         private SortType currentSortType;
@@ -40,18 +43,20 @@ namespace Game.Editor
                 }
             }
         }
+
         [PropertyOrder(-10), HorizontalGroup("Top", 0.4f, MinWidth = 100, MaxWidth = 1000, LabelWidth = 100)]
         [Button(ButtonSizes.Large, ButtonStyle.FoldoutButton, Expanded = true)]
         public void Search(string searchTerm)
         {
+            searchTerm = searchTerm.ToLower();
             List<ItemTableViewData> searchResults = new List<ItemTableViewData>();
             foreach (var item in itemTable)
             {
-                if (item.Name.Contains(searchTerm)
-                    || item.ShortDescription.Contains(searchTerm)
-                    || item.FullDescription.Contains(searchTerm)
-                    || item.Category.ToString().Contains(searchTerm)
-                    || item.Rarity.ToString().Contains(searchTerm)
+                if (item.Name.ToLower().Contains(searchTerm)
+                    || item.ShortDescription.ToLower().Contains(searchTerm)
+                    || item.FullDescription.ToLower().Contains(searchTerm)
+                    || item.Category.ToString().ToLower().Contains(searchTerm)
+                    || item.Rarity.ToString().ToLower().Contains(searchTerm)
                 )
                 {
                     searchResults.Add(item);
@@ -79,8 +84,6 @@ namespace Game.Editor
             //Create SO
             ItemData newItem = ScriptableObject.CreateInstance<ItemData>();
             newItem.Name = itemName;
-
-
 
 
             if (!AssetUtil.SaveAsset(newItem)) { return; }; //return if unsuccessful
@@ -186,11 +189,12 @@ namespace Game.Editor
         }
     }
 
-
+    /// <summary>
+    /// Item Data that is visualized in Window
+    /// </summary>
     [System.Serializable]
     public class ItemTableViewData
     {
-
         public ItemTableViewData(string name)
         {
             this.Name = name;
@@ -235,17 +239,21 @@ namespace Game.Editor
         [TextArea(2, 5)]
         [PropertyOrder(4)]
         public string ShortDescription;
+
         [TableColumnWidth(300)]
         [TextArea(5, 10)]
         [PropertyOrder(5)]
         public string FullDescription;
+
         [TableColumnWidth(200)]
         [PropertyOrder(7)]
         [ListDrawerSettings(Expanded = true)]
         public List<EffectExplanation> Explanations;
+
         [PropertyOrder(10)]
         [TableColumnWidth(100, Resizable = false)]
         public ItemCategory Category;
+
         [PropertyOrder(11)]
         [TableColumnWidth(100, Resizable = false)]
         public ItemRarity Rarity;
@@ -270,18 +278,12 @@ namespace Game.Editor
             newItem.Effects = Effects;
             newItem.ShortDescription = ShortDescription;
             newItem.FullDescription = FullDescription;
+            newItem.EffectExplanations = Explanations;
             newItem.Category = Category;
             newItem.Rarity = Rarity;
             AssetUtil.SaveAsset(newItem);
 
         }
-
-        //         [Button(ButtonSizes.Large)]
-        //         [ResponsiveButtonGroup("Actions")]
-        //         public void Revert()
-        //         {
-        //             
-        //         }
 
         private string oldName = "";
     }
