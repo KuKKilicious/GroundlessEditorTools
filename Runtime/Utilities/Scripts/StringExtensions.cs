@@ -16,6 +16,7 @@ namespace Game.Base.Utilities
         /// <returns></returns>
         public static string ToTitleCase(this string input)
         {
+            if (input == null ||input.Length == 0) { return ""; }
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append(System.Char.ToUpper(input[0])); //first to Upper
             for (int index = 1; index < input.Length; ++index)
@@ -43,6 +44,7 @@ namespace Game.Base.Utilities
         /// <returns></returns>
         public static string ToSentenceCase(this string input)
         {
+            if (input == null ||input.Length == 0) { return ""; }
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append(System.Char.ToUpper(input[0])); //Ignore first and to Upper
             for (int index = 1; index < input.Length; ++index)
@@ -66,6 +68,7 @@ namespace Game.Base.Utilities
         /// <returns></returns>
         public static string ToShortVersion(this string input)
         {
+            if (input == null ||input.Length == 0) { return ""; }
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append(System.Char.ToUpper(input[0])); //Always add first char
             bool canAcronym = false;
