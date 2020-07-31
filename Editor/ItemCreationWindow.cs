@@ -43,18 +43,20 @@ namespace Game.Editor
                 }
             }
         }
+
         [PropertyOrder(-10), HorizontalGroup("Top", 0.4f, MinWidth = 100, MaxWidth = 1000, LabelWidth = 100)]
         [Button(ButtonSizes.Large, ButtonStyle.FoldoutButton, Expanded = true)]
         public void Search(string searchTerm)
         {
+            searchTerm = searchTerm.ToLower();
             List<ItemTableViewData> searchResults = new List<ItemTableViewData>();
             foreach (var item in itemTable)
             {
-                if (item.Name.Contains(searchTerm)
-                    || item.ShortDescription.Contains(searchTerm)
-                    || item.FullDescription.Contains(searchTerm)
-                    || item.Category.ToString().Contains(searchTerm)
-                    || item.Rarity.ToString().Contains(searchTerm)
+                if (item.Name.ToLower().Contains(searchTerm)
+                    || item.ShortDescription.ToLower().Contains(searchTerm)
+                    || item.FullDescription.ToLower().Contains(searchTerm)
+                    || item.Category.ToString().ToLower().Contains(searchTerm)
+                    || item.Rarity.ToString().ToLower().Contains(searchTerm)
                 )
                 {
                     searchResults.Add(item);
@@ -82,8 +84,6 @@ namespace Game.Editor
             //Create SO
             ItemData newItem = ScriptableObject.CreateInstance<ItemData>();
             newItem.Name = itemName;
-
-
 
 
             if (!AssetUtil.SaveAsset(newItem)) { return; }; //return if unsuccessful
