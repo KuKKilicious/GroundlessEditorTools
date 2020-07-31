@@ -1,0 +1,15 @@
+{
+    "name": "Unity.com.groundless.editortool.Editor.asmdef",
+    "references": [
+        "GUID:ec3001ba10d372845b04598e4d205850"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
