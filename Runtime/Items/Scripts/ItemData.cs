@@ -13,9 +13,8 @@ namespace Game.Base
 
         public List<ItemEffect> Effects; 
         
-        public string ShortDescription;
+        public string Description;
         
-        public string FullDescription;
 
         public List<EffectExplanation> EffectExplanations;
 

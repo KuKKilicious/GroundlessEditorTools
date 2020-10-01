@@ -53,8 +53,7 @@ namespace Game.Editor
             foreach (var item in itemTable)
             {
                 if (item.Name.ToLower().Contains(searchTerm)
-                    || item.ShortDescription.ToLower().Contains(searchTerm)
-                    || item.FullDescription.ToLower().Contains(searchTerm)
+                    || item.Description.ToLower().Contains(searchTerm)
                     || item.Category.ToString().ToLower().Contains(searchTerm)
                     || item.Rarity.ToString().ToLower().Contains(searchTerm)
                 )
@@ -161,7 +160,7 @@ namespace Game.Editor
 
             foreach (var item in items)
             {
-                itemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.ShortDescription, item.FullDescription, item.EffectExplanations, item.Category, item.Rarity));
+                itemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.EffectExplanations, item.Category, item.Rarity));
             }
 
         }
@@ -199,14 +198,13 @@ namespace Game.Editor
         {
             this.Name = name;
         }
-        public ItemTableViewData(string name, Texture icon, List<ItemEffect> effects, string shortDescription, string fullDescription, List<EffectExplanation> explanations, ItemCategory category, ItemRarity rarity)
+        public ItemTableViewData(string name, Texture icon, List<ItemEffect> effects, string description, List<EffectExplanation> explanations, ItemCategory category, ItemRarity rarity)
         {
             this.Name = name;
             this.oldName = name;
             this.Icon = icon;
             this.Effects = effects;
-            this.ShortDescription = shortDescription;
-            this.FullDescription = fullDescription;
+            this.Description = description;
             this.Explanations = explanations;
             this.Category = category;
             this.Rarity = rarity;
@@ -238,12 +236,9 @@ namespace Game.Editor
         [TableColumnWidth(150)]
         [TextArea(2, 5)]
         [PropertyOrder(4)]
-        public string ShortDescription;
+        public string Description;
 
-        [TableColumnWidth(300)]
-        [TextArea(5, 10)]
-        [PropertyOrder(5)]
-        public string FullDescription;
+
 
         [TableColumnWidth(200)]
         [PropertyOrder(7)]
@@ -276,8 +271,7 @@ namespace Game.Editor
             newItem.Name = Name;
             newItem.Icon = Icon;
             newItem.Effects = Effects;
-            newItem.ShortDescription = ShortDescription;
-            newItem.FullDescription = FullDescription;
+            newItem.Description = Description;
             newItem.EffectExplanations = Explanations;
             newItem.Category = Category;
             newItem.Rarity = Rarity;
