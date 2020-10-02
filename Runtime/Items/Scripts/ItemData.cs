@@ -7,6 +7,8 @@ namespace Game.Base
     [CreateAssetMenu(fileName = "Item", menuName = "ScriptableObjects/Item")]
     public class ItemData : ScriptableObject
     {
+        public int Id;
+
         public Texture Icon;
 
         public string Name;
@@ -14,7 +16,6 @@ namespace Game.Base
         public List<ItemEffect> Effects; 
         
         public string Description;
-        
 
         public List<EffectExplanation> EffectExplanations;
 

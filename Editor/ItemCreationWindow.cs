@@ -83,12 +83,13 @@ namespace Game.Editor
             //Create SO
             ItemData newItem = ScriptableObject.CreateInstance<ItemData>();
             newItem.Name = itemName;
+            newItem.Id = AssetUtil.GetNextId();
 
 
             if (!AssetUtil.SaveAsset(newItem)) { return; }; //return if unsuccessful
             //Create ViewData
 
-            itemTable.Add(new ItemTableViewData(itemName));
+            itemTable.Add(new ItemTableViewData(itemName,newItem.Id));
         }
 
 
@@ -100,7 +101,7 @@ namespace Game.Editor
         {
             EditorUtility.DisplayDialog("Not implemented yet", "Go to Edit > Project Settings > Groundless to edit settings.", "OK");
         }
-
+        //TODO: Add Sort by index
         [HorizontalGroup("Top", 0.0f, MinWidth = 100, MaxWidth = 3100, LabelWidth = 100)]
         [Button(ButtonSizes.Small, ButtonStyle.FoldoutButton, Expanded = true)]
         public void Sort(SortType sortType)
@@ -160,7 +161,7 @@ namespace Game.Editor
 
             foreach (var item in items)
             {
-                itemTable.Add(new ItemTableViewData(item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.EffectExplanations, item.Category, item.Rarity));
+                itemTable.Add(new ItemTableViewData(item.Id,item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.EffectExplanations, item.Category, item.Rarity));
             }
 
         }
@@ -194,12 +195,14 @@ namespace Game.Editor
     [System.Serializable]
     public class ItemTableViewData
     {
-        public ItemTableViewData(string name)
+        public ItemTableViewData(string name, int id)
         {
             this.Name = name;
+            this.Id = id;
         }
-        public ItemTableViewData(string name, Texture icon, List<ItemEffect> effects, string description, List<EffectExplanation> explanations, ItemCategory category, ItemRarity rarity)
+        public ItemTableViewData(int id,string name, Texture icon, List<ItemEffect> effects, string description, List<EffectExplanation> explanations, ItemCategory category, ItemRarity rarity)
         {
+            this.Id = id;
             this.Name = name;
             this.oldName = name;
             this.Icon = icon;
@@ -209,10 +212,17 @@ namespace Game.Editor
             this.Category = category;
             this.Rarity = rarity;
         }
+       
+
         [PreviewField]
         [TableColumnWidth(64, Resizable = false)]
         [PropertyOrder(0)]
         public Texture Icon;
+
+        [TableColumnWidth(10)]
+        [PropertyOrder(1)]
+        
+        public int Id;
 
         [TableColumnWidth(120)]
         [PropertyOrder(1)]
@@ -268,6 +278,7 @@ namespace Game.Editor
                 AssetUtil.DeleteItemAsset(oldName.ToTitleCase());
                 oldName = Name;
             }
+            newItem.Id = Id;
             newItem.Name = Name;
             newItem.Icon = Icon;
             newItem.Effects = Effects;

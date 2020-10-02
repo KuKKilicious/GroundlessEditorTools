@@ -33,17 +33,17 @@ namespace Game.Base
                 return false;
             }
             //check if Folder already exists
-            if (!AssetDatabase.IsValidFolder(itemPath + "/"+ fileName))
+            if (!AssetDatabase.IsValidFolder(itemPath + "/" + fileName))
             {
                 //create new Folder
                 AssetDatabase.CreateFolder(itemPath, fileName);
             }
-            AssetDatabase.CreateAsset(newItem, itemPath+ "/"+ fileName + "/" + fileName + ".asset");
+            AssetDatabase.CreateAsset(newItem, itemPath + "/" + fileName + "/" + fileName + ".asset");
             AssetDatabase.SaveAssets();
             return true;
         }
 
-        public static bool SaveAsset(ItemEffect newEffect,string itemName,string effectName)
+        public static bool SaveAsset(ItemEffect newEffect, string itemName, string effectName)
         {
             string itemPath = GroundlessSettings.GetOrCreateSettings().ItemPath;
             //format string
@@ -56,12 +56,12 @@ namespace Game.Base
                 return false;
             }
             //check if Folder already exists
-            if (!AssetDatabase.IsValidFolder(itemPath + "/"+ fileName))
+            if (!AssetDatabase.IsValidFolder(itemPath + "/" + fileName))
             {
                 //create new Folder
                 AssetDatabase.CreateFolder(itemPath, fileName);
             }
-            AssetDatabase.CreateAsset(newEffect, itemPath + "/"+ fileName + "/" +fileName.ToShortVersion()+"_"+ effectName + ".asset");
+            AssetDatabase.CreateAsset(newEffect, itemPath + "/" + fileName + "/" + fileName.ToShortVersion() + "_" + effectName + ".asset");
             AssetDatabase.SaveAssets();
             return true;
         }
@@ -102,10 +102,28 @@ namespace Game.Base
             var folderName = name.ToTitleCase();
 
             string path = "";
-            if (!AssetDatabase.IsValidFolder(itemPath + "/"+ folderName)) { return null; }
+            if (!AssetDatabase.IsValidFolder(itemPath + "/" + folderName)) { return null; }
 
-            path = itemPath + "/"+ folderName;
+            path = itemPath + "/" + folderName;
             return path;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Current highest ID+1</returns>
+        public static int GetNextId()
+        {
+            var items = LoadItemAssets();
+            if (items == null )
+            {
+                return int.MinValue;
+            }
+            else if(items.Length <=0)
+            {
+                return 0;
+            }
+            var maxId = items.Max(r => r.Id);
+            return maxId + 1;
         }
     }
 }
