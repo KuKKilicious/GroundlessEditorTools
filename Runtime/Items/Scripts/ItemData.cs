@@ -23,5 +23,7 @@ namespace Game.Base
 
         public ItemRarity Rarity; 
 
+        public bool Active;
+
     }
 }

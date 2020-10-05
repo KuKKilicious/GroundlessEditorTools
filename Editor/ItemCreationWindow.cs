@@ -101,7 +101,7 @@ namespace Game.Editor
         {
             EditorUtility.DisplayDialog("Not implemented yet", "Go to Edit > Project Settings > Groundless to edit settings.", "OK");
         }
-        //TODO: Add Sort by index
+        //TODO: Add Sort by index and active passive
         [HorizontalGroup("Top", 0.0f, MinWidth = 100, MaxWidth = 3100, LabelWidth = 100)]
         [Button(ButtonSizes.Small, ButtonStyle.FoldoutButton, Expanded = true)]
         public void Sort(SortType sortType)
@@ -161,7 +161,7 @@ namespace Game.Editor
 
             foreach (var item in items)
             {
-                itemTable.Add(new ItemTableViewData(item.Id,item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.EffectExplanations, item.Category, item.Rarity));
+                itemTable.Add(new ItemTableViewData(item.Id,item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.EffectExplanations, item.Category, item.Rarity, item.Active));
             }
 
         }
@@ -200,7 +200,7 @@ namespace Game.Editor
             this.Name = name;
             this.Id = id;
         }
-        public ItemTableViewData(int id,string name, Texture icon, List<ItemEffect> effects, string description, List<EffectExplanation> explanations, ItemCategory category, ItemRarity rarity)
+        public ItemTableViewData(int id,string name, Texture icon, List<ItemEffect> effects, string description, List<EffectExplanation> explanations, ItemCategory category, ItemRarity rarity, bool active)
         {
             this.Id = id;
             this.Name = name;
@@ -211,6 +211,7 @@ namespace Game.Editor
             this.Explanations = explanations;
             this.Category = category;
             this.Rarity = rarity;
+            this.Active = active;
         }
        
 
@@ -249,7 +250,6 @@ namespace Game.Editor
         public string Description;
 
 
-
         [TableColumnWidth(200)]
         [PropertyOrder(7)]
         [ListDrawerSettings(Expanded = true)]
@@ -262,6 +262,10 @@ namespace Game.Editor
         [PropertyOrder(11)]
         [TableColumnWidth(100, Resizable = false)]
         public ItemRarity Rarity;
+
+        [PropertyOrder(12)]
+        [TableColumnWidth(30, Resizable = false)]
+        public bool Active;
 
         [Button(ButtonSizes.Medium)]
         [TableColumnWidth(60, Resizable = false)]

@@ -1,5 +1,7 @@
 #Changelog
 
+0.2.3 add active passive toggle
+
 0.2.2 add IItemEffect interface
 
 0.2.1 added index to Itemdata
