@@ -290,6 +290,7 @@ namespace Game.Editor
             newItem.EffectExplanations = Explanations;
             newItem.Category = Category;
             newItem.Rarity = Rarity;
+            newItem.Active = Active;
             AssetUtil.SaveAsset(newItem);
 
         }
