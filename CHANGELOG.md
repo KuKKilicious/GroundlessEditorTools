@@ -1,5 +1,6 @@
 #Changelog
 
+0.2.3.1 fix saving active state of item;
 0.2.3 add active passive toggle
 
 0.2.2 add IItemEffect interface
