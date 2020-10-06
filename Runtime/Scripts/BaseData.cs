@@ -6,12 +6,12 @@ namespace Game.Base
 {
     public enum ItemCategory
     {
-        Offense, Defense, Fortune, Neon, Utility
+        Any,Offense, Defense, Fortune, Neon, Utility
     }
 
     public enum ItemRarity
     {
-        Common, Uncommon, Rare, Epic, Legendary
+        Any,Common, Uncommon, Rare, Epic, Legendary
     }
     public enum EffectTrigger
     {
