@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.Graphs;
 using UnityEngine;
-using UnityEngine.UIElements;
 namespace Game.Settings
 {
     // Register a SettingsProvider using IMGUI for the drawing framework:
