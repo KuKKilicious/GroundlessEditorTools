@@ -1,4 +1,5 @@
-﻿using Game.Base;
+﻿#if UNITY_EDITOR
+using Game.Base;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
@@ -103,3 +104,4 @@ namespace Game.Editor
 }
 
 
+#endif
