@@ -201,7 +201,7 @@ namespace Game.Editor
             this.Name = name;
             this.Id = id;
         }
-        public ItemTableViewData(int id,string name, Texture icon, List<ItemEffect> effects, string description, List<EffectExplanation> explanations, ItemCategory category, ItemRarity rarity, bool active)
+        public ItemTableViewData(int id,string name, Sprite icon, List<ItemEffect> effects, string description, List<EffectExplanation> explanations, ItemCategory category, ItemRarity rarity, bool active)
         {
             this.Id = id;
             this.Name = name;
@@ -219,7 +219,7 @@ namespace Game.Editor
         [PreviewField]
         [TableColumnWidth(64, Resizable = false)]
         [PropertyOrder(0)]
-        public Texture Icon;
+        public Sprite Icon;
 
         [TableColumnWidth(10)]
         [PropertyOrder(1)]

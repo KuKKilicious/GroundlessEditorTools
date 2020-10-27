@@ -9,7 +9,7 @@ namespace Game.Base
     {
         public int Id;
 
-        public Texture Icon;
+        public Sprite Icon;
 
         public string Name;
 
