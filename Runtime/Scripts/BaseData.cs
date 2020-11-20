@@ -11,7 +11,7 @@ namespace Game.Base
 
     public enum ItemRarity
     {
-        Any,Common, Uncommon, Rare, Epic, Legendary
+        Any,Common, Uncommon, Rare, Mythic
     }
     public enum EffectTrigger
     {
@@ -22,6 +22,7 @@ namespace Game.Base
     {
         Self, OnGround, Forward, ClosestTarget, FurthestTarget, RandomTarget
     }
+
     public enum EffectSource
     {
         Self, Sword, Ground, ClosestTarget, FurthestTarget, RandomTarget
