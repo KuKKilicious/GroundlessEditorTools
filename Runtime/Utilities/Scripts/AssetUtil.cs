@@ -41,7 +41,7 @@ namespace Game.Base
                 AssetDatabase.CreateFolder(itemPath, fileName);
             }
             AssetDatabase.CreateAsset(newItem, itemPath + "/" + fileName + "/" + fileName + ".asset");
-            UnityEditor.VersionControl.Provider.Checkout(itemPath + "/" + fileName + "/" + fileName + ".asset"
+            UnityEditor.VersionControl.Provider.Checkout(UnityEditor.VersionControl.Provider.GetAssetByPath(itemPath + "/" + fileName + "/" + fileName + ".asset")
                 , UnityEditor.VersionControl.CheckoutMode.Both);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -67,7 +67,7 @@ namespace Game.Base
                 AssetDatabase.CreateFolder(itemPath, fileName);
             }
             AssetDatabase.CreateAsset(newEffect, itemPath + "/" + fileName + "/" + fileName.ToShortVersion() + "_" + effectName + ".asset");
-            UnityEditor.VersionControl.Provider.Checkout(itemPath + "/" + fileName + "/" + fileName + ".asset"
+            UnityEditor.VersionControl.Provider.Checkout(UnityEditor.VersionControl.Provider.GetAssetByPath(itemPath + "/" + fileName + "/" + fileName.ToShortVersion() + "_" + effectName + ".asset")
                 , UnityEditor.VersionControl.CheckoutMode.Both);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
