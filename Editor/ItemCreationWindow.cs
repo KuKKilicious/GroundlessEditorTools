@@ -208,8 +208,8 @@ namespace Game.Editor
         public ItemTableViewData(int id, string name, Sprite icon, List<ItemEffect> effects, string description, ItemCategory category, ItemRarity rarity, bool active)
         {
             this.Id = id;
-            this.oldName = Name;
             this.Name = name;
+            this.oldName = Name;
             this.Icon = icon;
             this.Effects = effects;
             this.Description = description;
@@ -315,14 +315,7 @@ namespace Game.Editor
         public void Delete()
         {
             //Check if sure
-            var toDelete = EditorUtility.DisplayDialog("Confirmation", "Are you sure to delete the item with all assets in the item folder?", "Yes"
-                , "No");
-            if (!toDelete)
-            { return; }
-
-            AssetUtil.DeleteFolder(Name);
-
-
+            EditorUtility.DisplayDialog("Not implemented yet", "Please delete the assets you don't require anymore within Unity", "OK");
         }
 
         private string oldName = "";

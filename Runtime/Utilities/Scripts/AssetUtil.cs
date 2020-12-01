@@ -42,6 +42,7 @@ namespace Game.Base
             }
             AssetDatabase.CreateAsset(newItem, itemPath + "/" + fileName + "/" + fileName + ".asset");
             AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
             return true;
         }
 
@@ -65,6 +66,7 @@ namespace Game.Base
             }
             AssetDatabase.CreateAsset(newEffect, itemPath + "/" + fileName + "/" + fileName.ToShortVersion() + "_" + effectName + ".asset");
             AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
             return true;
         }
         /// <summary>
@@ -97,6 +99,7 @@ namespace Game.Base
         {
             string itemPath = GroundlessSettings.GetOrCreateSettings().ItemPath;
             FileUtil.ReplaceDirectory(GetItemFolderPath(oldName), itemPath + "/" + name.ToTitleCase());
+            FileUtil.DeleteFileOrDirectory(GetItemFolderPath(oldName));
             AssetDatabase.Refresh();
         }
 
@@ -105,9 +108,6 @@ namespace Game.Base
             AssetDatabase.RenameAsset(GetItemFolderPath(name)+"/"+oldName.ToTitleCase()+".asset",name.ToTitleCase());
             AssetDatabase.Refresh();
         }
-        public static void DeleteFolder(string Name)
-        {
-        }
 
         public static string GetItemFolderPath(string name)
         {
@@ -115,7 +115,7 @@ namespace Game.Base
             var folderName = name.ToTitleCase();
 
             string path = "";
-            if (!AssetDatabase.IsValidFolder(itemPath + "/" + folderName)) { return null; }
+            if (!AssetDatabase.IsValidFolder(itemPath + "/" + folderName)) { throw new NotSupportedException("Folder "+name+" doesn't exist"); }
 
             path = itemPath + "/" + folderName;
             return path;
@@ -127,16 +127,19 @@ namespace Game.Base
         public static int GetNextId()
         {
             var items = LoadItemAssets();
-            if (items == null )
+            if (items == null)
             {
-                return int.MinValue;
-            }
-            else if(items.Length <=0)
+                return 0;}
+            var ints = items.Select(x=>x.Id);
+            var enumerable = ints as int[] ?? ints.ToArray();
+            int counter = enumerable.Any() ? enumerable.First() : -1;
+
+            while (counter < int.MaxValue)
             {
-                return 0;
+                if (!enumerable.Contains(++counter)) return counter;
             }
-            var maxId = items.Max(r => r.Id);
-            return maxId + 1;
+
+            return int.MinValue;
         }
 
 

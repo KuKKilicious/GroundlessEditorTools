@@ -1,6 +1,6 @@
 {
   "name": "com.groundless.editortool",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "displayName": "Editor Tool",
   "description": "Editor Tools for the project Groundless.\n\nRequires OdinInspector",
   "unity": "2020.1",
