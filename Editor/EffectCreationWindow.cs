@@ -76,7 +76,7 @@ namespace Game.Editor
         }
 
         [PropertyOrder(-1)]
-        public string Name;
+        public string EffectName;
 
         [InlineEditor(ObjectFieldMode = InlineEditorObjectFieldModes.Hidden)]
 
@@ -89,13 +89,13 @@ namespace Game.Editor
         [GUIColor(0, 0.65f, 0.05f)]
         private void CreateNewEffect()
         {
-            if (Name == null || Name.Length <= 3)
+            if (EffectName == null || EffectName.Length <= 3)
             {
                 EditorUtility.DisplayDialog("Warning", "Please enter a name", "OK");
                 return;
             } 
             //Create Asset, Save
-            AssetUtil.SaveAsset(EffectData,item.Name,Name);
+            AssetUtil.SaveAsset(EffectData,item.Name,EffectName);
             item.Effects.Add(EffectData);
             EffectCreationWindow.ForceTreeRebuild();
 

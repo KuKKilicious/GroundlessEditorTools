@@ -16,7 +16,7 @@ namespace Game.Editor
 {
     public enum SortType
     {
-        Name, Category, Rarity
+        ID, Name, Category, Rarity
     }
     /// <summary>
     /// Window to create Items
@@ -90,7 +90,7 @@ namespace Game.Editor
             if (!AssetUtil.SaveAsset(newItem)) { return; }; //return if unsuccessful
             //Create ViewData
 
-            itemTable.Add(new ItemTableViewData(itemName,newItem.Id));
+            itemTable.Add(new ItemTableViewData(itemName, newItem.Id));
         }
 
 
@@ -125,6 +125,9 @@ namespace Game.Editor
                     itemTable = itemTable.OrderBy(o => o.Rarity).ToList();
                     break;
                 }
+                case SortType.ID:
+                    itemTable = itemTable.OrderBy(o => o.Id).ToList();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(sortType), sortType, null);
             }
@@ -162,7 +165,7 @@ namespace Game.Editor
 
             foreach (var item in items)
             {
-                itemTable.Add(new ItemTableViewData(item.Id,item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.EffectExplanations, item.Category, item.Rarity, item.Active));
+                itemTable.Add(new ItemTableViewData(item.Id, item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.Category, item.Rarity, item.Active));
             }
 
         }
@@ -200,34 +203,37 @@ namespace Game.Editor
         {
             this.Name = name;
             this.Id = id;
+            this.oldName = Name;
         }
-        public ItemTableViewData(int id,string name, Sprite icon, List<ItemEffect> effects, string description, List<EffectExplanation> explanations, ItemCategory category, ItemRarity rarity, bool active)
+        public ItemTableViewData(int id, string name, Sprite icon, List<ItemEffect> effects, string description, ItemCategory category, ItemRarity rarity, bool active)
         {
             this.Id = id;
+            this.oldName = Name;
             this.Name = name;
-            this.oldName = name;
             this.Icon = icon;
             this.Effects = effects;
             this.Description = description;
-            this.Explanations = explanations;
             this.Category = category;
             this.Rarity = rarity;
             this.Active = active;
         }
-       
+
 
         [PreviewField]
         [TableColumnWidth(64, Resizable = false)]
         [PropertyOrder(0)]
+        [OnValueChanged("SetDirty")]
         public Sprite Icon;
 
-        [TableColumnWidth(10)]
-        [PropertyOrder(1)]
-        
+        [TableColumnWidth(30, Resizable = false)]
+        [PropertyOrder(13)]
+        [ReadOnly]
+        [OnValueChanged("SetDirty")]
         public int Id;
 
         [TableColumnWidth(120)]
         [PropertyOrder(1)]
+        [OnValueChanged("SetDirty")]
         public string Name;
 
         [AssetsOnly]
@@ -235,6 +241,8 @@ namespace Game.Editor
         [TableColumnWidth(500)]
         [InlineEditor]
         [PropertyOrder(2)]
+        [OnValueChanged("SetDirty")]
+
         public List<ItemEffect> Effects;
 
         [Button(ButtonSizes.Medium, Name = "Details")]
@@ -248,24 +256,25 @@ namespace Game.Editor
         [TableColumnWidth(150)]
         [TextArea(2, 5)]
         [PropertyOrder(4)]
+        [OnValueChanged("SetDirty")]
+
         public string Description;
-
-
-        [TableColumnWidth(200)]
-        [PropertyOrder(7)]
-        [ListDrawerSettings(Expanded = true)]
-        public List<EffectExplanation> Explanations;
 
         [PropertyOrder(10)]
         [TableColumnWidth(100, Resizable = false)]
-        public ItemCategory Category;
+        [OnValueChanged("SetDirty")]
 
+        public ItemCategory Category;
         [PropertyOrder(11)]
         [TableColumnWidth(100, Resizable = false)]
+        [OnValueChanged("SetDirty")]
+
         public ItemRarity Rarity;
 
         [PropertyOrder(12)]
-        [TableColumnWidth(30, Resizable = false)]
+        [TableColumnWidth(40, Resizable = false)]
+        [OnValueChanged("SetDirty")]
+
         public bool Active;
 
         [Button(ButtonSizes.Medium)]
@@ -274,13 +283,15 @@ namespace Game.Editor
         [ResponsiveButtonGroup("Actions")]
         public void Save()
         {
+            if (!dirty) { return; }
             //Create SO
             ItemData newItem = ScriptableObject.CreateInstance<ItemData>();
             //if new name, delete old asset
             if (!oldName.Equals(Name))
             {
                 //TODO: Delete Asset
-                AssetUtil.DeleteItemAsset(oldName.ToTitleCase());
+                AssetUtil.ReplaceFolder(Name, oldName);
+                AssetUtil.RenameAsset(Name, oldName);
                 oldName = Name;
             }
             newItem.Id = Id;
@@ -288,15 +299,39 @@ namespace Game.Editor
             newItem.Icon = Icon;
             newItem.Effects = Effects;
             newItem.Description = Description;
-            newItem.EffectExplanations = Explanations;
             newItem.Category = Category;
             newItem.Rarity = Rarity;
             newItem.Active = Active;
             AssetUtil.SaveAsset(newItem);
 
+            dirty = false;
+
+        }
+
+        [Button(ButtonSizes.Medium)]
+        [TableColumnWidth(60, Resizable = false)]
+        [PropertyOrder(20)]
+        [ResponsiveButtonGroup("Delete")]
+        public void Delete()
+        {
+            //Check if sure
+            var toDelete = EditorUtility.DisplayDialog("Confirmation", "Are you sure to delete the item with all assets in the item folder?", "Yes"
+                , "No");
+            if (!toDelete)
+            { return; }
+
+            AssetUtil.DeleteFolder(Name);
+
+
         }
 
         private string oldName = "";
+        private bool dirty = false;
+
+        private void SetDirty()
+        {
+            dirty = true;
+        }
     }
 
 

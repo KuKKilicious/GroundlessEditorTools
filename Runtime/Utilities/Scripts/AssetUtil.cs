@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Game.Base.Utilities;
@@ -91,10 +92,21 @@ namespace Game.Base
             return items?.ToArray();
         }
 
-        public static void DeleteItemAsset(string fileName)
+        
+        public static void ReplaceFolder(string name, string oldName)
         {
             string itemPath = GroundlessSettings.GetOrCreateSettings().ItemPath;
-            AssetDatabase.DeleteAsset(itemPath + "/" + fileName + ".asset");
+            FileUtil.ReplaceDirectory(GetItemFolderPath(oldName), itemPath + "/" + name.ToTitleCase());
+            AssetDatabase.Refresh();
+        }
+
+        public static void RenameAsset(string name, string oldName)
+        {
+            AssetDatabase.RenameAsset(GetItemFolderPath(name)+"/"+oldName.ToTitleCase()+".asset",name.ToTitleCase());
+            AssetDatabase.Refresh();
+        }
+        public static void DeleteFolder(string Name)
+        {
         }
 
         public static string GetItemFolderPath(string name)
@@ -126,6 +138,8 @@ namespace Game.Base
             var maxId = items.Max(r => r.Id);
             return maxId + 1;
         }
+
+
     }
 }
 #endif
