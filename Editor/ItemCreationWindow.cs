@@ -150,13 +150,7 @@ namespace Game.Editor
         public void LoadAll()
         {
 
-            if (GroundlessSettings.GetOrCreateSettings().ConfirmWhenLoadingOrQuitting)
-            {
-                //Check if sure
-                var toClear = EditorUtility.DisplayDialog("Confirmation", "Are you sure to load all?", "Yes", "No");
-                if (!toClear)
-                    return;
-            }
+            
             itemTable.Clear();
 
             ItemData[] items = AssetUtil.LoadItemAssets();
