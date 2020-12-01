@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Game.Base.Utilities;
 using Game.Settings;
@@ -34,14 +35,21 @@ namespace Game.Base
                 Debug.LogWarning("ItemAsset Name not long enough");
                 return false;
             }
+
+            string folderPath = newItem.FolderPath;
+            if (string.IsNullOrEmpty(folderPath))
+            {
+                folderPath = itemPath+"/"+fileName;
+            }
             //check if Folder already exists
-            if (!AssetDatabase.IsValidFolder(itemPath + "/" + fileName))
+            if (!AssetDatabase.IsValidFolder(folderPath))
             {
                 //create new Folder
                 AssetDatabase.CreateFolder(itemPath, fileName);
             }
-            AssetDatabase.CreateAsset(newItem, itemPath + "/" + fileName + "/" + fileName + ".asset");
-            UnityEditor.VersionControl.Provider.Checkout(UnityEditor.VersionControl.Provider.GetAssetByPath(itemPath + "/" + fileName + "/" + fileName + ".asset")
+
+            AssetDatabase.CreateAsset(newItem, folderPath + "/" + fileName + ".asset");
+            UnityEditor.VersionControl.Provider.Checkout(UnityEditor.VersionControl.Provider.GetAssetByPath(folderPath + "/" + fileName + ".asset")
                 , UnityEditor.VersionControl.CheckoutMode.Both);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -99,17 +107,11 @@ namespace Game.Base
         }
 
         
-        public static void ReplaceFolder(string name, string oldName)
-        {
-            string itemPath = GroundlessSettings.GetOrCreateSettings().ItemPath;
-            FileUtil.ReplaceDirectory(GetItemFolderPath(oldName), itemPath + "/" + name.ToTitleCase());
-            FileUtil.DeleteFileOrDirectory(GetItemFolderPath(oldName));
-            AssetDatabase.Refresh();
-        }
+        
 
-        public static void RenameAsset(string name, string oldName)
+        public static void RenameAsset(string name, string oldName,string folderPath)
         {
-            AssetDatabase.RenameAsset(GetItemFolderPath(name)+"/"+oldName.ToTitleCase()+".asset",name.ToTitleCase());
+            AssetDatabase.RenameAsset(folderPath+"/"+oldName.ToTitleCase()+".asset",name.ToTitleCase());
             AssetDatabase.Refresh();
         }
 

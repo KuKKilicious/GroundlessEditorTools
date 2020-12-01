@@ -35,7 +35,7 @@ namespace Game.Editor
             tree.Add("New StatGain", statGainEffect);
             tree.Add("New Spawn", spawnEffect);
             tree.Add("New Usable", usableEffect);
-            tree.AddAllAssetsAtPath(Item.Name, AssetUtil.GetItemFolderPath(Item.Name), typeof(ItemEffect));
+            tree.AddAllAssetsAtPath(Item.Name, Item.FolderPath, typeof(ItemEffect));
             
 
             return tree;
@@ -97,6 +97,8 @@ namespace Game.Editor
             //Create Asset, Save
             AssetUtil.SaveAsset(EffectData,item.Name,EffectName);
             item.Effects.Add(EffectData);
+            item.SetDirty();
+            item.Save();
             EffectCreationWindow.ForceTreeRebuild();
 
         }

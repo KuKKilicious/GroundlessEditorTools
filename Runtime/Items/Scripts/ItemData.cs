@@ -11,6 +11,8 @@ namespace Game.Base
         [ReadOnly]
         public int Id;
 
+        public string FolderPath;
+
         public Sprite Icon;
 
         public string Name;
@@ -26,6 +28,5 @@ namespace Game.Base
         public ItemRarity Rarity;
 
         public bool Active;
-
     }
 }

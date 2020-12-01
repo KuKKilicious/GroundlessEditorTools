@@ -11,6 +11,7 @@ using Game.Base;
 using Game.Base.Utilities;
 using System.Linq;
 using Game.Settings;
+using UnityEngine.WSA;
 
 namespace Game.Editor
 {
@@ -86,11 +87,11 @@ namespace Game.Editor
             newItem.Name = itemName;
             newItem.Id = AssetUtil.GetNextId();
 
-
             if (!AssetUtil.SaveAsset(newItem)) { return; }; //return if unsuccessful
             //Create ViewData
+            newItem.FolderPath = AssetUtil.GetItemFolderPath(itemName);
 
-            itemTable.Add(new ItemTableViewData(itemName, newItem.Id));
+            itemTable.Add(new ItemTableViewData(itemName, newItem.Id,newItem.FolderPath));
         }
 
 
@@ -149,8 +150,6 @@ namespace Game.Editor
         [Button(ButtonSizes.Large)]
         public void LoadAll()
         {
-
-            
             itemTable.Clear();
 
             ItemData[] items = AssetUtil.LoadItemAssets();
@@ -159,7 +158,7 @@ namespace Game.Editor
 
             foreach (var item in items)
             {
-                itemTable.Add(new ItemTableViewData(item.Id, item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.Category, item.Rarity, item.Active));
+                itemTable.Add(new ItemTableViewData(item.Id, item.name.ToSentenceCase(), item.Icon, item.Effects, item.Description, item.Category, item.Rarity, item.Active,item.FolderPath));
             }
 
         }
@@ -193,13 +192,14 @@ namespace Game.Editor
     [System.Serializable]
     public class ItemTableViewData
     {
-        public ItemTableViewData(string name, int id)
+        public ItemTableViewData(string name, int id, string folderPath)
         {
             this.Name = name;
             this.Id = id;
+            this.folderPath = folderPath;
             this.oldName = Name;
         }
-        public ItemTableViewData(int id, string name, Sprite icon, List<ItemEffect> effects, string description, ItemCategory category, ItemRarity rarity, bool active)
+        public ItemTableViewData(int id, string name, Sprite icon, List<ItemEffect> effects, string description, ItemCategory category, ItemRarity rarity, bool active, string folderPath)
         {
             this.Id = id;
             this.Name = name;
@@ -210,6 +210,7 @@ namespace Game.Editor
             this.Category = category;
             this.Rarity = rarity;
             this.Active = active;
+            this.folderPath = folderPath;
         }
 
 
@@ -238,6 +239,8 @@ namespace Game.Editor
         [OnValueChanged("SetDirty")]
 
         public List<ItemEffect> Effects;
+
+        public string FolderPath => folderPath;
 
         [Button(ButtonSizes.Medium, Name = "Details")]
         [TableColumnWidth(60, Resizable = false)]
@@ -283,12 +286,12 @@ namespace Game.Editor
             //if new name, delete old asset
             if (!oldName.Equals(Name))
             {
-                //TODO: Delete Asset
-                AssetUtil.ReplaceFolder(Name, oldName);
-                AssetUtil.RenameAsset(Name, oldName);
+                //AssetUtil.ReplaceFolder(Name, oldName);
+                AssetUtil.RenameAsset(Name, oldName, FolderPath);
                 oldName = Name;
             }
             newItem.Id = Id;
+            newItem.FolderPath = folderPath;
             newItem.Name = Name;
             newItem.Icon = Icon;
             newItem.Effects = Effects;
@@ -312,10 +315,10 @@ namespace Game.Editor
             EditorUtility.DisplayDialog("Not implemented yet", "Please delete the assets you don't require anymore within Unity", "OK");
         }
 
-        private string oldName = "";
+        private string oldName;
         private bool dirty = false;
-
-        private void SetDirty()
+        private string folderPath;
+        public void SetDirty()
         {
             dirty = true;
         }
