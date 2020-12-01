@@ -10,7 +10,7 @@ namespace Game.Base
     {
         [ReadOnly]
         public int Id;
-
+        [ReadOnly]
         public string FolderPath;
 
         public Sprite Icon;
