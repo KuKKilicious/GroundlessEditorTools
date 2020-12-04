@@ -176,7 +176,7 @@ namespace Game.Editor
         }
 
         [PropertyOrder(-1)]
-        [TableList(AlwaysExpanded = true, MinScrollViewHeight = 1000, HideToolbar = true)]
+        [TableList(AlwaysExpanded = true, MinScrollViewHeight = 100000, HideToolbar = true)]
         [SerializeField]
         private List<ItemTableViewData> itemTable = new List<ItemTableViewData>();
 
