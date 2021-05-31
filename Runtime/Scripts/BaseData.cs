@@ -30,7 +30,7 @@ namespace Game.Base
 
     public enum StatType
     {
-        MaxHP, CurrentHP, MaxShield, Shield, AttackSpeed, AttackDamage, CritDamage, CritPercentage, GoldGain, SplashDamage, RarityChance, AbilityAmp, LifeLeech, NeonQuant, MaxNeonQuant,DamageReduction
+        MaxHP, CurrentHP, MaxShield, Shield, AttackSpeed, AttackDamage, CritDamage, CritPercentage, GoldGain, SplashDamage, RarityChance, AbilityAmp, LifeLeech, NeonQuant, MaxNeonQuant,DamageReduction,HealIncreaseMultiplier
     }
 
     public enum EffectExplanation
